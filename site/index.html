@@ -88,6 +88,7 @@
   /* Wind compass: arrow points the way the wind blows */
   .wind { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pencil); }
   .compass { width: 26px; height: 26px; flex: none; color: var(--ink); }
+  .compass .ring { opacity: .6; }
   .day .wind { margin-top: 8px; flex-direction: column; gap: 4px; text-align: center; }
   .wx li.windchip { display: inline-flex; align-items: center; gap: 6px; padding-left: 6px; }
   .wx .compass { width: 20px; height: 20px; }
@@ -216,11 +217,10 @@
   const SECT = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
   const sect = (deg) => SECT[Math.floor(((deg + 22.5) % 360) / 45)];
   function compass(deg) {
-    const arrow = deg == null ? '<circle cx="47" cy="47" r="5" fill="currentColor"/>'
-      : `<g class="arrow" transform="rotate(${(deg + 180) % 360} 47 47)"><path d="M47 66.6V29.8M34.3 39.7L47 27l12.7 12.7" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>`;
-    return `<svg class="compass" viewBox="0 0 95 94" aria-hidden="true">
-      <circle cx="47" cy="47" r="38" stroke="currentColor" stroke-width="5" fill="none" opacity=".55"/>
-      <g stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity=".55"><path d="M47 6V4M47 90V88M88 47h2M4 47h2"/></g>${arrow}</svg>`;
+    // Ring + ticks are one shape (no overlaps); arrow drawn pointing up, then rotated downwind around the center.
+    const arrow = deg == null ? '<circle cx="27.2" cy="27.2" r="3" fill="currentColor"/>'
+      : `<path transform="rotate(${(deg + 180) % 360} 27.2 27.2)" fill="currentColor" d="M26.1992 38.4605C26.1992 39.0128 26.6469 39.4605 27.1992 39.4605C27.7515 39.4605 28.1992 39.0128 28.1992 38.4605H27.1992H26.1992ZM27.1992 38.4605H28.1992V15.7128H27.1992H26.1992V38.4605H27.1992ZM27.9063 15.0057C27.5158 14.6151 26.8826 14.6151 26.4921 15.0057L20.1282 21.3696C19.7376 21.7601 19.7376 22.3933 20.1282 22.7838C20.5187 23.1744 21.1518 23.1744 21.5424 22.7838L27.1992 17.127L32.8561 22.7838C33.2466 23.1744 33.8798 23.1744 34.2703 22.7838C34.6608 22.3933 34.6608 21.7601 34.2703 21.3696L27.9063 15.0057Z"/>`;
+    return `<svg class="compass" viewBox="0 0 55 55" aria-hidden="true"><path class="ring" fill="currentColor" d="M27.1963 0C28.577 1.02807e-07 29.6963 1.1193 29.6963 2.5V3.64941C29.6962 3.88528 29.6607 4.11275 29.5996 4.3291C40.3711 5.45882 48.9257 14.0299 50.0312 24.8086C50.2603 24.7394 50.5033 24.7022 50.7549 24.7021H51.9043C53.2848 24.7024 54.4043 25.8216 54.4043 27.2021C54.4043 28.5827 53.2848 29.7019 51.9043 29.7021H50.7549C50.5017 29.7021 50.2576 29.6637 50.0273 29.5938C48.9041 40.3569 40.3519 48.9095 29.5889 50.0332C29.6578 50.2618 29.6962 50.5038 29.6963 50.7549V51.9043C29.696 53.2848 28.5768 54.4043 27.1963 54.4043C25.8157 54.4043 24.6965 53.2848 24.6963 51.9043V50.7549C24.6963 50.5056 24.7338 50.2652 24.8018 50.0381C14.024 48.9323 5.45373 40.3778 4.32324 29.6074C4.10866 29.6675 3.88313 29.7021 3.64941 29.7021H2.5C1.11929 29.7021 0 28.5829 0 27.2021C0 25.8214 1.11929 24.7021 2.5 24.7021H3.64941C3.8813 24.7022 4.10527 24.7358 4.31836 24.7949C5.43109 14.0089 14.0047 5.43603 24.791 4.32422C24.7308 4.10937 24.6963 3.88345 24.6963 3.64941V2.5C24.6963 1.1193 25.8156 3.09243e-06 27.1963 0ZM27.1748 6.20215C15.5888 6.20226 6.19642 15.5946 6.19629 27.1807C6.19629 38.7668 15.5887 48.1591 27.1748 48.1592C38.761 48.1592 48.1533 38.7669 48.1533 27.1807C48.1532 15.5946 38.7609 6.20216 27.1748 6.20215Z"/>${arrow}</svg>`;
   }
   const windLabel = (deg, mph) => (deg == null ? `Calm${mph != null ? `, ${Math.round(mph)} mph` : ''}` : `From ${sect(deg)}, ${Math.round(mph)} mph`);
 
