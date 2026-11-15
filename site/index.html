@@ -52,7 +52,9 @@
 
   /* Week, as a field-guide table */
   .week { display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 1px solid var(--rule); }
-  .day { padding: 16px 10px 18px; border-right: 1px solid var(--rule); text-align: center; min-width: 0; }
+  /* Each day spans 6 shared rows (subgrid) so compasses and icon lists line up across the week */
+  .day { padding: 16px 10px 18px; border-right: 1px solid var(--rule); text-align: center; min-width: 0;
+    display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; align-items: start; justify-items: center; }
   .day:last-child { border-right: 0; }
   .day .dow { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
   .day .date { font-size: 12px; color: var(--pencil); }
@@ -137,13 +139,13 @@
   @media (max-width: 640px) {
     .outlook { grid-template-columns: 1fr; justify-items: start; padding: 20px; }
     .week { grid-template-columns: 1fr; }
-    .day { display: grid; grid-template-columns: 64px 1fr 56px; align-items: center; gap: 12px; text-align: left; border-right: 0; border-bottom: 1px solid var(--rule); padding: 12px 4px; }
+    .day { grid-row: auto; grid-template-rows: none; justify-items: stretch; display: grid; grid-template-columns: 64px 1fr 56px; align-items: center; gap: 12px; text-align: left; border-right: 0; border-bottom: 1px solid var(--rule); padding: 12px 4px; }
     .day:last-child { border-bottom: 0; }
     .meter { width: auto; height: 10px; margin: 0; }
     .meter i { top: 0; right: auto; bottom: 0; height: auto; width: var(--p, 0%); }
     .day .pct { text-align: right; }
     .day .note { grid-column: 2 / -1; margin-top: -6px; }
-    .facts { grid-column: 2 / -1; margin-top: -4px; display: flex; flex-wrap: wrap; gap: 4px 12px; justify-items: start; }
+    .facts { grid-column: 2 / -1; margin-top: -4px; display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: flex-start; }
     .day .wind { grid-column: 2 / -1; margin-top: -6px; flex-direction: row; gap: 6px; text-align: left; }
     .day .compass { width: 22px; height: 22px; }
     .rec-head .n { font-size: 30px; }
@@ -258,15 +260,16 @@
   const sky = (v) => (v == null ? null : v < 0.6 ? 'Foggy' : v < 3 ? 'Hazy' : 'No fog');
   const trend = (dp) => (dp == null ? '–' : dp >= 1 ? 'Rising' : dp <= -1 ? 'Falling' : 'Steady');
   function facts(d) {
-    const out = [];
-    if (d.morning_wind_mph != null) out.push(`<span title="Morning wind (6–11 am)">${ICON.wind}<b>${d.morning_wind_mph}</b> mph</span>`);
-    if (d.morning_gust_mph != null) out.push(`<span title="Morning gusts">${ICON.gust}${d.morning_gust_mph} mph</span>`);
-    if (d.rain_pct != null) out.push(`<span title="Chance of rain, overnight to 11 am">${ICON.rain}${d.rain_pct}%</span>`);
-    if (d.max_temp_f != null) out.push(`<span title="High temperature">${ICON.temp}${d.max_temp_f}°</span>`);
-    if (d.pressure_change_hpa != null) out.push(`<span title="Barometer vs. yesterday morning (${d.pressure_change_hpa > 0 ? '+' : ''}${d.pressure_change_hpa} hPa)">${ICON.gauge}${trend(d.pressure_change_hpa)}</span>`);
-    if (d.morning_vis_mi != null) out.push(`<span title="Fog at the Gate, 6–11 am: visibility (${d.morning_vis_mi} mi)">${ICON.fog}${sky(d.morning_vis_mi)}</span>`);
-    if (d.sunrise) out.push(`<span title="Sunrise">${ICON.sunrise}${d.sunrise} am</span>`);
-    return out.length ? `<div class="facts">${out.join('')}</div>` : '';
+    const v = (x, f) => (x == null ? '–' : f(x));
+    return `<div class="facts">
+      <span title="Morning wind (6–11 am)">${ICON.wind}${v(d.morning_wind_mph, (x) => `<b>${x}</b> mph`)}</span>
+      <span title="Morning gusts">${ICON.gust}${v(d.morning_gust_mph, (x) => `${x} mph`)}</span>
+      <span title="Chance of rain, overnight to 11 am">${ICON.rain}${v(d.rain_pct, (x) => `${x}%`)}</span>
+      <span title="High temperature">${ICON.temp}${v(d.max_temp_f, (x) => `${x}°`)}</span>
+      <span title="Barometer vs. yesterday morning">${ICON.gauge}${trend(d.pressure_change_hpa)}</span>
+      <span title="Fog at the Gate, 6–11 am${d.morning_vis_mi != null ? ` (visibility ${d.morning_vis_mi} mi)` : ''}">${ICON.fog}${v(d.morning_vis_mi, sky)}</span>
+      <span title="Sunrise">${ICON.sunrise}${v(d.sunrise, (x) => `${x} am`)}</span>
+    </div>`;
   }
 
   function renderWeek(days, blank) {
@@ -276,9 +279,9 @@
         <div><div class="dow">${d.dow}</div><div class="date">${d.date}</div></div>
         <div class="meter"><i style="--p:${blank ? 0 : barFill(d.chance)}%"></i></div>
         <div class="pct">${blank ? '–' : pct(d.chance)}</div>
-        ${!blank && d.note ? `<div class="note">${d.note}</div>` : ''}
-        ${!blank && d.night_wind_mph != null ? `<div class="wind" title="Overnight wind (8 pm–6 am)">${compass(d.night_wind_deg)}<span>${windLabel(d.night_wind_deg, d.night_wind_mph)}</span></div>` : ''}
-        ${!blank ? facts(d) : ''}
+        <div class="note">${!blank && d.note ? d.note : ''}</div>
+        <div class="wind" title="Overnight wind (8 pm–6 am)">${!blank && d.night_wind_mph != null ? `${compass(d.night_wind_deg)}<span>${windLabel(d.night_wind_deg, d.night_wind_mph)}</span>` : ''}</div>
+        ${blank ? '<div class="facts"></div>' : facts(d)}
       </div>`).join('');
     const legend = $('legend');
     if (!blank) {
