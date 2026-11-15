@@ -88,6 +88,32 @@
   .done { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 700; outline: none; }
   button.link { height: auto; padding: 4px 0; background: none; color: var(--moss); text-decoration: underline; text-underline-offset: 3px; }
 
+  /* Record days */
+  .records { display: grid; gap: 18px; }
+  .rec .tag { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--moss); }
+  .rec-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin: 4px 0 14px; }
+  .rec-head h3 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 600; }
+  .rec-head .n { font-family: var(--serif); font-size: 44px; font-weight: 700; line-height: 1; }
+  .rec-head .n small { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--pencil); margin-left: 6px; }
+  .wx { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
+  .wx li { font-size: 13px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 99px; color: var(--ink); background: var(--paper); }
+  .wx li b { font-weight: 600; color: var(--pencil); margin-right: 4px; }
+  .rec h4 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--pencil); }
+  .top3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .top3 div { border-top: 3px solid var(--gold); padding-top: 8px; }
+  .top3 strong { display: block; font-family: var(--serif); font-size: 28px; line-height: 1.1; }
+  .top3 span { font-size: 14px; color: var(--pencil); }
+  .insights { margin: 0 0 16px; padding-left: 18px; }
+  .insights li { margin-bottom: 6px; }
+  .rare { font-size: 14px; color: var(--pencil); margin: -6px 0 16px !important; }
+  details { border-top: 1px solid var(--rule); padding-top: 12px; }
+  summary { cursor: pointer; font-weight: 600; color: var(--moss); }
+  .all { columns: 3 200px; column-gap: 24px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 14px; }
+  .all li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dotted var(--rule); break-inside: avoid; }
+  .all li span { color: var(--pencil); font-variant-numeric: tabular-nums; }
+  .byline { margin-top: 14px !important; font-size: 14px; color: var(--pencil); }
+  .byline a { color: var(--moss); }
+
   footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--pencil); }
   footer p { margin: 0 0 8px; }
 
@@ -101,6 +127,8 @@
     .meter i { top: 0; right: auto; bottom: 0; }
     .day .pct { text-align: right; }
     .day .note { grid-column: 2 / -1; margin-top: -6px; }
+    .top3 strong { font-size: 22px; }
+    .rec-head .n { font-size: 36px; }
   }
 </style>
 </head>
@@ -147,6 +175,12 @@
       <p>The day Battery Godfrey lights up with the most species: migrants passing through, seabirds streaming past the Gate, everything at once.</p>
       <p class="muted" id="method">We're studying 10 years of eBird checklists from Battery Godfrey, adjusted for how many birders were out, to learn which weather brings the biggest days. The forecast switches on as soon as that's done.</p>
     </div>
+  </section>
+
+  <section>
+    <h2>Unicorn days from the record books</h2>
+    <p class="muted" style="margin:0 0 14px">The biggest single checklists at Battery Godfrey, 2016–2025, from eBird.</p>
+    <div class="records" id="records"></div>
   </section>
 
   <footer>
@@ -239,6 +273,38 @@
     } catch { note.textContent = 'Something went wrong. Please try again.'; }
     btn.disabled = false;
   });
+
+  // Record days from site/examples.json (built by examples.py)
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  const fmtTime = (t) => { const [h, m] = t.split(':').map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`; };
+  fetch('examples.json', { cache: 'no-store' }).then((r) => r.json()).then((list) => {
+    $('records').innerHTML = list.map((e) => {
+      const w = e.weather;
+      const others = e.observers > 1 ? ` and ${e.observers - 1} other birders` : '';
+      return `<article class="sheet rec">
+        <div class="tag">${esc(e.kind)}</div>
+        <div class="rec-head"><h3>${fmtDate(e.date)}</h3><div class="n">${e.species_count}<small>species</small></div></div>
+        <h4>Weather</h4>
+        <ul class="wx">
+          <li><b>Overnight wind</b>${esc(w.night_wind)}</li>
+          <li><b>Morning wind</b>${esc(w.morning_wind)}</li>
+          <li><b>High</b>${w.high_f}°F</li>
+          <li><b>Pressure</b>${w.pressure_change_hpa > 0 ? '+' : ''}${w.pressure_change_hpa} hPa in 24 h</li>
+          <li><b>Sky</b>${w.rain ? 'Rain overnight' : w.fog ? 'Foggy morning' : 'Dry, no fog'}</li>
+        </ul>
+        <h4>Most birds</h4>
+        <div class="top3">${e.top.map((t) => `<div><strong>${t.count.toLocaleString()}</strong><span>${esc(t.name)}</span></div>`).join('')}</div>
+        <h4>Notable</h4>
+        <ul class="insights">${e.insights.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+        <p class="rare">Rarest here: ${e.rare.map((r) => `${esc(r.name)} (${r.days} of ${e.birded_days} days)`).join(', ')}.</p>
+        <details><summary>All ${e.species_count} species and counts</summary>
+          <ul class="all">${e.species.map((s) => `<li>${esc(s.name)}<span>${s.count == null ? 'present' : s.count.toLocaleString()}</span></li>`).join('')}</ul>
+        </details>
+        <p class="byline">Checklist by ${esc(e.observer)}${others} · ${e.hours} hours from ${fmtTime(e.start)} · <a href="${e.url}" target="_blank" rel="noopener">View on eBird ↗</a></p>
+      </article>`;
+    }).join('');
+  }).catch(() => { $('records').closest('section').hidden = true; });
 </script>
 </body>
 </html>
