@@ -201,8 +201,10 @@
 <script>
   const SIGNUP_ENDPOINT = 'https://formspree.io/f/mgakawlp';
   const $ = (id) => document.getElementById(id);
-  // Bar fill on a square-root scale so small chances still show, and differ: 1% -> 10%, 25% -> 50%. 0 -> empty.
-  const fill = (p) => (p > 0 ? Math.min(100, Math.sqrt(p) * 100) : 0);
+  // Ring: true to scale (10% fills a tenth), at least a thin 2% sliver above zero; 0 stays empty.
+  const fill = (p) => (p > 0 ? Math.min(100, Math.max(2, p * 100)) : 0);
+  // Day bars: gentle curve so small chances still differ (2% -> 6%, 10% -> 20%, 50% -> 62%, 100% -> 100%).
+  const barFill = (p) => (p > 0 ? Math.min(100, Math.max(3, Math.pow(p, 0.7) * 100)) : 0);
   const pct = (p) => { const v = p * 100; return v >= 9.95 ? `${Math.round(v)}%` : v >= 1 ? `${v.toFixed(1)}%` : v > 0 ? '<1%' : '0%'; };
 
   function blankWeek() {
@@ -231,7 +233,7 @@
     $('week').innerHTML = days.map((d) => `
       <div class="day${blank ? ' blank' : ''}${best && d === best && d.chance >= 0.1 ? ' best' : ''}">
         <div><div class="dow">${d.dow}</div><div class="date">${d.date}</div></div>
-        <div class="meter"><i style="--p:${blank ? 0 : fill(d.chance)}%"></i></div>
+        <div class="meter"><i style="--p:${blank ? 0 : barFill(d.chance)}%"></i></div>
         <div class="pct">${blank ? '–' : pct(d.chance)}</div>
         ${!blank && d.night_wind_mph != null ? `<div class="wind" title="Overnight wind (8 pm–6 am)">${compass(d.night_wind_deg)}<span>${windLabel(d.night_wind_deg, d.night_wind_mph)}</span></div>` : ''}
         ${!blank && d.note ? `<div class="note">${d.note}</div>` : ''}
