@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-15T21:04+00:00",
- "generated_local": "Sun Nov 15, 1:04 PM",
+ "generated": "2026-11-15T22:26+00:00",
+ "generated_local": "Sun Nov 15, 2:26 PM",
  "base_rate": 0.05084745762711865,
  "cut_species": 77,
  "method": "A unicorn day is one of the top 5% of days at Battery Godfrey for variety: about 77+ species for a normal group of birders. We learned what those days have in common from 10 years of eBird checklists (944 birded days, 2016\u20132025), adjusted for how many people were out. Time of year matters most (late September and October lead), then warm, dry weather with wind off the land overnight. Even a perfect setup is only about a 1-in-4 shot, because who shows up and luck matter too. Weather is from the National Weather Service over the Presidio and Open-Meteo at Fort Point.",
@@ -10,24 +10,27 @@
    "date": "Nov 15",
    "iso": "2026-11-15",
    "label": "today",
-   "chance": 0.0631,
+   "chance": 0.067,
    "note": "Migration season, pressure rising",
    "summary": "Migration season, pressure rising.",
    "within_48h": true,
-   "night_wind_mph": 6.1,
+   "night_wind_mph": 4.9,
    "night_wind_from": "S",
-   "night_wind_deg": 160,
-   "wind_source": "NWS+Open-Meteo",
+   "night_wind_deg": 158,
+   "wind_source": "Open-Meteo",
    "pressure_change_hpa": 2.2,
    "max_temp_f": 61,
-   "rain_overnight_in": 0
+   "rain_overnight_in": 0,
+   "morning_wind_mph": 11,
+   "morning_gust_mph": 20,
+   "rain_pct": 15
   },
   {
    "dow": "Mon",
    "date": "Nov 16",
    "iso": "2026-11-16",
    "label": "tomorrow",
-   "chance": 0.023,
+   "chance": 0.0228,
    "note": "Rain overnight, migration season",
    "summary": "Migration season, north wind overnight, pressure rising; but rain overnight.",
    "within_48h": true,
@@ -35,16 +38,19 @@
    "night_wind_from": "N",
    "night_wind_deg": 344,
    "wind_source": "NWS",
-   "pressure_change_hpa": 3.1,
+   "pressure_change_hpa": 3.0,
    "max_temp_f": 56,
-   "rain_overnight_in": 0.3
+   "rain_overnight_in": 0.65,
+   "morning_wind_mph": 6,
+   "morning_gust_mph": 10,
+   "rain_pct": 88
   },
   {
    "dow": "Tue",
    "date": "Nov 17",
    "iso": "2026-11-17",
    "label": "Tuesday",
-   "chance": 0.0436,
+   "chance": 0.0441,
    "note": "Migration season",
    "summary": "Migration season.",
    "within_48h": false,
@@ -52,9 +58,12 @@
    "night_wind_from": "NW",
    "night_wind_deg": 324,
    "wind_source": "NWS",
-   "pressure_change_hpa": -0.7,
+   "pressure_change_hpa": -0.6,
    "max_temp_f": 61,
-   "rain_overnight_in": 0
+   "rain_overnight_in": 0,
+   "morning_wind_mph": 6,
+   "morning_gust_mph": 10,
+   "rain_pct": 22
   },
   {
    "dow": "Wed",
@@ -71,7 +80,10 @@
    "wind_source": "NWS",
    "pressure_change_hpa": -7.3,
    "max_temp_f": 57,
-   "rain_overnight_in": 0.21
+   "rain_overnight_in": 0.21,
+   "morning_wind_mph": 23,
+   "morning_gust_mph": 38,
+   "rain_pct": 100
   },
   {
    "dow": "Thu",
@@ -88,7 +100,10 @@
    "wind_source": "NWS",
    "pressure_change_hpa": -6.1,
    "max_temp_f": 57,
-   "rain_overnight_in": 0.65
+   "rain_overnight_in": 0.65,
+   "morning_wind_mph": 25,
+   "morning_gust_mph": 32,
+   "rain_pct": 99
   },
   {
    "dow": "Fri",
@@ -105,7 +120,10 @@
    "wind_source": "NWS",
    "pressure_change_hpa": 13.2,
    "max_temp_f": 59,
-   "rain_overnight_in": 0.0
+   "rain_overnight_in": 0.0,
+   "morning_wind_mph": 8,
+   "morning_gust_mph": 13,
+   "rain_pct": 57
   },
   {
    "dow": "Sat",
@@ -122,7 +140,10 @@
    "wind_source": "NWS",
    "pressure_change_hpa": -6.5,
    "max_temp_f": 56,
-   "rain_overnight_in": 0
+   "rain_overnight_in": 0,
+   "morning_wind_mph": 13,
+   "morning_gust_mph": 20,
+   "rain_pct": 52
   }
  ]
 }

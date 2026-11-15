@@ -96,6 +96,15 @@
   .wx li.windchip { display: inline-flex; align-items: center; gap: 6px; padding-left: 6px; }
   .wx .compass { width: 20px; height: 20px; }
 
+  /* Day facts with icons (same icons as Unicorn Beach Day) */
+  .facts { display: grid; gap: 4px; margin-top: 8px; font-size: 12px; color: var(--pencil); justify-items: center; }
+  .facts span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .facts b { color: var(--ink); font-weight: 600; }
+  .facts svg, .legend svg { width: 14px; height: 14px; flex: none; color: var(--moss); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; margin: 10px 0 0; font-size: 12px; color: var(--pencil); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend .compass { width: 14px; height: 14px; }
+
   /* Record days */
   .records { display: grid; gap: 18px; }
   .rec .tag { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--moss); }
@@ -134,6 +143,7 @@
     .meter i { top: 0; right: auto; bottom: 0; height: auto; width: var(--p, 0%); }
     .day .pct { text-align: right; }
     .day .note { grid-column: 2 / -1; margin-top: -6px; }
+    .facts { grid-column: 2 / -1; margin-top: -4px; display: flex; flex-wrap: wrap; gap: 4px 12px; justify-items: start; }
     .day .wind { grid-column: 2 / -1; margin-top: -6px; flex-direction: row; gap: 6px; text-align: left; }
     .day .compass { width: 22px; height: 22px; }
     .rec-head .n { font-size: 30px; }
@@ -157,6 +167,7 @@
   </div>
 
   <div class="week" id="week" aria-live="polite"></div>
+  <p class="legend" id="legend" hidden></p>
 
   <section class="signup">
     <h2 id="signup-title">Get an email when one is coming</h2>
@@ -228,6 +239,25 @@
   }
   const windLabel = (deg, mph) => (deg == null ? `Calm${mph != null ? `, ${Math.round(mph)} mph` : ''}` : `From ${sect(deg)}, ${Math.round(mph)} mph`);
 
+  const svg = (d) => `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICON = {
+    wind: svg('<path d="M2 6h8.5a2 2 0 1 0-2-2"/><path d="M2 10h10.5a2 2 0 1 1-2 2"/>'),
+    gust: svg('<path d="M2 4.5h7"/><path d="M2 8h12"/><path d="M2 11.5h8"/><path d="M11.5 6l2.5 2-2.5 2"/>'),
+    rain: svg('<path d="M8 2s4 4.6 4 7.6A4 4 0 0 1 4 9.6C4 6.6 8 2 8 2z"/>'),
+    temp: svg('<path d="M6.5 9.3V3.5a1.5 1.5 0 0 1 3 0v5.8a3 3 0 1 1-3 0z"/><path d="M8 11.5V7"/>'),
+    gauge: svg('<path d="M2.5 11a5.5 5.5 0 1 1 11 0"/><path d="M8 11l2.6-3"/><path d="M2.5 13.5h11"/>'),
+  };
+  const trend = (dp) => (dp == null ? '–' : dp >= 1 ? 'Rising' : dp <= -1 ? 'Falling' : 'Steady');
+  function facts(d) {
+    const out = [];
+    if (d.morning_wind_mph != null) out.push(`<span title="Morning wind (6–11 am)">${ICON.wind}<b>${d.morning_wind_mph}</b> mph</span>`);
+    if (d.morning_gust_mph != null) out.push(`<span title="Morning gusts">${ICON.gust}${d.morning_gust_mph} mph</span>`);
+    if (d.rain_pct != null) out.push(`<span title="Chance of rain, overnight to 11 am">${ICON.rain}${d.rain_pct}%</span>`);
+    if (d.max_temp_f != null) out.push(`<span title="High temperature">${ICON.temp}${d.max_temp_f}°</span>`);
+    if (d.pressure_change_hpa != null) out.push(`<span title="Barometer vs. yesterday morning (${d.pressure_change_hpa > 0 ? '+' : ''}${d.pressure_change_hpa} hPa)">${ICON.gauge}${trend(d.pressure_change_hpa)}</span>`);
+    return out.length ? `<div class="facts">${out.join('')}</div>` : '';
+  }
+
   function renderWeek(days, blank) {
     const best = blank ? null : days.reduce((a, d) => (!a || d.chance > a.chance ? d : a), null);
     $('week').innerHTML = days.map((d) => `
@@ -236,8 +266,15 @@
         <div class="meter"><i style="--p:${blank ? 0 : barFill(d.chance)}%"></i></div>
         <div class="pct">${blank ? '–' : pct(d.chance)}</div>
         ${!blank && d.night_wind_mph != null ? `<div class="wind" title="Overnight wind (8 pm–6 am)">${compass(d.night_wind_deg)}<span>${windLabel(d.night_wind_deg, d.night_wind_mph)}</span></div>` : ''}
+        ${!blank ? facts(d) : ''}
         ${!blank && d.note ? `<div class="note">${d.note}</div>` : ''}
       </div>`).join('');
+    const legend = $('legend');
+    if (!blank) {
+      legend.innerHTML = `<span>${compass(180)}Overnight wind</span><span>${ICON.wind}Morning wind</span><span>${ICON.gust}Gusts</span>`
+        + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span><span>${ICON.gauge}Barometer</span>`;
+      legend.hidden = false;
+    }
   }
 
   fetch('data.json', { cache: 'no-store' })

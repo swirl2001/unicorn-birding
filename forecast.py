@@ -23,7 +23,7 @@ MODEL = json.loads((ROOT / 'model.json').read_text())
 ALERT_CHANCE = 0.25   # email when a day within 48 h reaches this (about 5x the everyday odds)
 NWS_GRID = 'https://api.weather.gov/gridpoints/MTR/83,106'
 OM = 'https://api.open-meteo.com/v1/forecast?timezone=America%2FLos_Angeles&past_days=2&forecast_days=8'
-FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=wind_speed_10m,wind_direction_10m,pressure_msl,precipitation'
+FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability'
                    '&wind_speed_unit=mph&precipitation_unit=inch')
 SFO = OM + '&latitude=37.6189&longitude=-122.3750&daily=temperature_2m_max&temperature_unit=fahrenheit'
 SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
@@ -72,13 +72,16 @@ def nws_hourly(props, key, conv):
 def weather():
     fp = get(FORT_POINT)['hourly']
     hours = [datetime.fromisoformat(t) for t in fp['time']]
-    om = {k: dict(zip(hours, fp[k])) for k in ('wind_speed_10m', 'wind_direction_10m', 'pressure_msl', 'precipitation')}
+    om = {k: dict(zip(hours, fp[k])) for k in ('wind_speed_10m', 'wind_direction_10m', 'wind_gusts_10m', 'pressure_msl',
+                                               'precipitation', 'precipitation_probability')}
     sfo = get(SFO)['daily']
     tmax = {date.fromisoformat(d): v for d, v in zip(sfo['time'], sfo['temperature_2m_max'])}
     try:
         props = get(NWS_GRID)['properties']
         nws_spd = nws_hourly(props, 'windSpeed', lambda x: x * 0.621371)
         nws_dir = nws_hourly(props, 'windDirection', float)
+        om['nws_gust'] = nws_hourly(props, 'windGust', lambda x: x * 0.621371)
+        om['nws_pop'] = nws_hourly(props, 'probabilityOfPrecipitation', float)
     except Exception as e:  # NWS is often flaky; Open-Meteo covers it
         print('NWS unavailable:', e, file=sys.stderr)
         nws_spd, nws_dir = {}, {}
@@ -145,6 +148,21 @@ def describe(d, night_dir, night_mph, dp, t, rain):
     return good, bad
 
 
+def morning_conditions(d, om, nws_spd):
+    """Birding hours (6-11 am): mean wind and peak gust in mph; rain chance from 8 pm the night before to 11 am."""
+    def pick(nws, om_key, t):
+        v = nws.get(t)
+        return v if v is not None else om[om_key].get(t)
+    hours = [datetime(d.year, d.month, d.day, h) for h in range(6, 11)]
+    wind = [x for x in (pick(nws_spd, 'wind_speed_10m', t) for t in hours) if x is not None]
+    gust = [x for x in (pick(om.get('nws_gust', {}), 'wind_gusts_10m', t) for t in hours) if x is not None]
+    start = datetime(d.year, d.month, d.day) - timedelta(hours=4)
+    pop = [x for x in (pick(om.get('nws_pop', {}), 'precipitation_probability', start + timedelta(hours=h)) for h in range(15))
+           if x is not None]
+    return (round(sum(wind) / len(wind)) if wind else None, round(max(gust)) if gust else None,
+            round(max(pop)) if pop else None)
+
+
 def build(now=None):
     now = now or datetime.now(PT)
     om, tmax, nws_spd, nws_dir = weather()
@@ -158,6 +176,7 @@ def build(now=None):
         start = datetime(d.year, d.month, d.day) - timedelta(hours=4)
         rain_in = sum(om['precipitation'].get(start + timedelta(hours=h)) or 0 for h in range(10))
         t = tmax.get(d)
+        m_wind, m_gust, rain_pct = morning_conditions(d, om, nws_spd)
         if None in (mph, dp, t):
             p, note = 0.0, 'No forecast yet'
             good, bad = [], []
@@ -173,7 +192,7 @@ def build(now=None):
             note=note, summary=summary, within_48h=i <= 1,
             night_wind_mph=None if mph is None else round(mph, 1), night_wind_from=nd, night_wind_deg=None if nd is None else round(deg), wind_source=src,
             pressure_change_hpa=None if dp is None else round(dp, 1), max_temp_f=None if t is None else round(t),
-            rain_overnight_in=round(rain_in, 2)))
+            rain_overnight_in=round(rain_in, 2), morning_wind_mph=m_wind, morning_gust_mph=m_gust, rain_pct=rain_pct))
     return dict(
         generated=now.astimezone(timezone.utc).isoformat(timespec='minutes'),
         generated_local=now.strftime('%a %b %-d, %-I:%M %p'),
