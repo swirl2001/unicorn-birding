@@ -6,9 +6,6 @@
 <title>Unicorn Birding Day</title>
 <meta name="description" content="The chance of a huge, species-packed birding day at Battery Godfrey in San Francisco's Presidio, this week.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪶</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #f5efe1;
@@ -19,8 +16,8 @@
     --moss: #5f6f3a;
     --gold: #e0a526;
     --gold-soft: #f6e3b3;
-    --serif: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --serif: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", system-ui, sans-serif;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", system-ui, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -29,24 +26,23 @@
     }
   }
   * { box-sizing: border-box; }
-  h1, h2, h3, .big strong, .pct, .n, .top3 strong, .done { font-variant-numeric: lining-nums; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--sans); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 var(--sans); }
   main { max-width: 820px; margin: 0 auto; padding: 40px 16px 72px; }
   a { color: inherit; }
 
   /* Masthead */
   .mast { border-bottom: 2px solid var(--ink); padding-bottom: 18px; }
-  .kicker { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); }
-  h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(38px, 8vw, 64px); line-height: .95; letter-spacing: -0.02em; margin: 10px 0 12px; }
+  .kicker { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--moss); }
+  h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(28px, 6vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 4px 0 6px; }
   h1 em { font-style: normal; font-weight: inherit; color: inherit; }
   .lede { margin: 0; max-width: 34em; color: var(--pencil); font-size: 17px; }
 
   /* Outlook */
   .outlook { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding: 28px 0 22px; border-bottom: 1px solid var(--rule); }
-  .outlook h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 4.4vw, 32px); line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .outlook h2 { font-family: var(--serif); font-weight: 700; font-size: 22px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
   .outlook p { margin: 0; color: var(--pencil); max-width: 32em; }
   .big { text-align: right; }
-  .big strong { display: block; font-family: var(--serif); font-size: clamp(56px, 12vw, 88px); line-height: .9; letter-spacing: -0.03em; }
+  .big strong { display: block; font-family: var(--serif); font-weight: 700; font-size: 48px; line-height: 1; letter-spacing: -0.03em; }
   .big span { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--pencil); }
   .outlook.go h2 { color: var(--moss); }
   .outlook.go .big strong { color: var(--gold); }
@@ -59,14 +55,14 @@
   .day .date { font-size: 12px; color: var(--pencil); }
   .meter { position: relative; height: 84px; margin: 12px auto 10px; width: 14px; border-radius: 99px; background: var(--rule); overflow: hidden; }
   .meter i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--gold); border-radius: 99px; }
-  .day .pct { font-family: var(--serif); font-weight: 600; font-size: 20px; }
+  .day .pct { font-family: var(--serif); font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums; }
   .day .note { font-size: 12px; color: var(--pencil); margin-top: 4px; line-height: 1.35; }
   .day.best { background: var(--gold-soft); }
   .day.blank .meter { opacity: .45; }
 
   /* Sections */
   section { margin-top: 44px; }
-  section h2 { font-family: var(--serif); font-weight: 600; font-size: 24px; margin: 0 0 12px; letter-spacing: -0.01em; }
+  section h2 { font-family: var(--serif); font-weight: 700; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
   .sheet { background: var(--page); border: 1px solid var(--rule); border-radius: 6px; padding: 22px; }
   .sheet p { margin: 0; }
   .sheet p + p { margin-top: 12px; }
@@ -86,15 +82,15 @@
   .fine:empty { display: none; }
   .signed-up { display: grid; gap: 6px; justify-items: start; }
   .signed-up[hidden], form[hidden], h2[hidden] { display: none; }
-  .done { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 700; outline: none; }
+  .done { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none; }
   button.link { height: auto; padding: 4px 0; background: none; color: var(--moss); text-decoration: underline; text-underline-offset: 3px; }
 
   /* Record days */
   .records { display: grid; gap: 18px; }
   .rec .tag { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--moss); }
   .rec-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin: 4px 0 14px; }
-  .rec-head h3 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 600; }
-  .rec-head .n { font-family: var(--serif); font-size: 44px; font-weight: 700; line-height: 1; }
+  .rec-head h3 { margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .rec-head .n { font-family: var(--serif); font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; }
   .rec-head .n small { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--pencil); margin-left: 6px; }
   .wx { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
   .wx li { font-size: 13px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 99px; color: var(--ink); background: var(--paper); }
@@ -102,7 +98,7 @@
   .rec h4 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--pencil); }
   .top3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
   .top3 div { border-top: 3px solid var(--gold); padding-top: 8px; }
-  .top3 strong { display: block; font-family: var(--serif); font-size: 28px; line-height: 1.1; }
+  .top3 strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
   .top3 span { font-size: 14px; color: var(--pencil); }
   .insights { margin: 0 0 16px; padding-left: 18px; }
   .insights li { margin-bottom: 6px; }
@@ -128,8 +124,7 @@
     .meter i { top: 0; right: auto; bottom: 0; }
     .day .pct { text-align: right; }
     .day .note { grid-column: 2 / -1; margin-top: -6px; }
-    .top3 strong { font-size: 22px; }
-    .rec-head .n { font-size: 36px; }
+    .rec-head .n { font-size: 30px; }
   }
 </style>
 </head>
