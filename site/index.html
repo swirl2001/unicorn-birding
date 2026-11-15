@@ -38,14 +38,17 @@
   .lede { margin: 0; max-width: 34em; color: var(--pencil); font-size: 17px; }
 
   /* Outlook */
-  .outlook { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding: 28px 0 22px; border-bottom: 1px solid var(--rule); }
+  /* Outlook card: same layout as Unicorn Beach Day's hero, in birding colors */
+  .outlook { margin: 28px 0; padding: 28px; border-radius: 12px; background: var(--page); border: 1px solid var(--rule);
+    display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+  .ring { --p: 0; width: 140px; height: 140px; border-radius: 50%; display: grid; place-items: center;
+    background: conic-gradient(var(--gold) calc(var(--p) * 1%), var(--rule) 0); }
+  .ring > div { width: 112px; height: 112px; border-radius: 50%; background: var(--page); display: grid; place-items: center; text-align: center; }
+  .ring strong { font-family: var(--serif); font-weight: 700; font-size: 34px; letter-spacing: -0.03em; line-height: 1; }
+  .ring span { font-size: 12px; color: var(--pencil); }
   .outlook h2 { font-family: var(--serif); font-weight: 700; font-size: 22px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
-  .outlook p { margin: 0; color: var(--pencil); max-width: 32em; }
-  .big { text-align: right; }
-  .big strong { display: block; font-family: var(--serif); font-weight: 700; font-size: 48px; line-height: 1; letter-spacing: -0.03em; }
-  .big span { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--pencil); }
-  .outlook.go h2 { color: var(--moss); }
-  .outlook.go .big strong { color: var(--gold); }
+  .outlook p { margin: 0; color: var(--pencil); }
+  .outlook.go { border-color: var(--gold); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 30%, transparent); }
 
   /* Week, as a field-guide table */
   .week { display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 1px solid var(--rule); }
@@ -123,8 +126,7 @@
   footer p { margin: 0 0 8px; }
 
   @media (max-width: 640px) {
-    .outlook { grid-template-columns: 1fr; }
-    .big { text-align: left; order: -1; }
+    .outlook { grid-template-columns: 1fr; justify-items: start; padding: 20px; }
     .week { grid-template-columns: 1fr; }
     .day { display: grid; grid-template-columns: 64px 1fr 56px; align-items: center; gap: 12px; text-align: left; border-right: 0; border-bottom: 1px solid var(--rule); padding: 12px 4px; }
     .day:last-child { border-bottom: 0; }
@@ -147,11 +149,11 @@
   </header>
 
   <div class="outlook" id="outlook">
+    <div class="ring" id="ring"><div><div><strong id="best-pct">–</strong><br><span>best chance</span></div></div></div>
     <div>
       <h2 id="outlook-title">Checking the skies…</h2>
       <p id="outlook-text"></p>
     </div>
-    <div class="big"><strong id="best-pct">–</strong><span>best chance this week</span></div>
   </div>
 
   <div class="week" id="week" aria-live="polite"></div>
@@ -249,6 +251,7 @@
       const days = data.days || [];
       const best = days.reduce((a, d) => (!a || d.chance > a.chance ? d : a), null);
       $('best-pct').textContent = best ? pct(best.chance) : '–';
+      $('ring').style.setProperty('--p', best ? fill(best.chance) : 0);
       if (best && best.chance >= 0.25) {
         $('outlook').classList.add('go');
         $('outlook-title').textContent = `Play hooky ${best.label}!`;
