@@ -253,7 +253,7 @@
     temp: svg('<path d="M6.5 9.3V3.5a1.5 1.5 0 0 1 3 0v5.8a3 3 0 1 1-3 0z"/><path d="M8 11.5V7"/>'),
     gauge: svg('<path d="M2.5 11a5.5 5.5 0 1 1 11 0"/><path d="M8 11l2.6-3"/><path d="M2.5 13.5h11"/>'),
     fog: svg('<path d="M4.6 9h6.9a2.4 2.4 0 0 0 .2-4.8A3.4 3.4 0 0 0 5.2 4.6 2.2 2.2 0 0 0 4.6 9z"/><path d="M2.5 11.5h8"/><path d="M5.5 14h8"/>'),
-    sunrise: svg('<path d="M4.5 11.5a3.5 3.5 0 0 1 7 0"/><path d="M1.5 11.5h13"/><path d="M8 3v2.2"/><path d="M3.3 6.3l1.4 1.4"/><path d="M12.7 6.3l-1.4 1.4"/><path d="M4.5 14h7"/>'),
+    sunrise: svg('<path d="M4.5 10.5a3.5 3.5 0 0 1 7 0"/><path d="M1.5 10.5h13"/><path d="M8 3.9v1.7"/><path d="M3.5 6l1.1 1.1"/><path d="M12.5 6l-1.1 1.1"/><path d="M4.5 13h7"/>'),
   };
   const sky = (v) => (v == null ? null : v < 0.6 ? 'Foggy' : v < 3 ? 'Hazy' : 'No fog');
   const trend = (dp) => (dp == null ? '–' : dp >= 1 ? 'Rising' : dp <= -1 ? 'Falling' : 'Steady');
