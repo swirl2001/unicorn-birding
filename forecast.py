@@ -23,7 +23,7 @@ MODEL = json.loads((ROOT / 'model.json').read_text())
 ALERT_CHANCE = 0.25   # email when a day within 48 h reaches this (about 5x the everyday odds)
 NWS_GRID = 'https://api.weather.gov/gridpoints/MTR/83,106'
 OM = 'https://api.open-meteo.com/v1/forecast?timezone=America%2FLos_Angeles&past_days=2&forecast_days=8'
-FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability'
+FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability,visibility&daily=sunrise'
                    '&wind_speed_unit=mph&precipitation_unit=inch')
 SFO = OM + '&latitude=37.6189&longitude=-122.3750&daily=temperature_2m_max&temperature_unit=fahrenheit'
 SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
@@ -70,10 +70,12 @@ def nws_hourly(props, key, conv):
 
 
 def weather():
-    fp = get(FORT_POINT)['hourly']
+    fp_all = get(FORT_POINT)
+    fp = fp_all['hourly']
     hours = [datetime.fromisoformat(t) for t in fp['time']]
     om = {k: dict(zip(hours, fp[k])) for k in ('wind_speed_10m', 'wind_direction_10m', 'wind_gusts_10m', 'pressure_msl',
-                                               'precipitation', 'precipitation_probability')}
+                                               'precipitation', 'precipitation_probability', 'visibility')}
+    om['sunrise'] = {date.fromisoformat(t[:10]): datetime.fromisoformat(t) for t in fp_all['daily']['sunrise']}
     sfo = get(SFO)['daily']
     tmax = {date.fromisoformat(d): v for d, v in zip(sfo['time'], sfo['temperature_2m_max'])}
     try:
@@ -159,8 +161,10 @@ def morning_conditions(d, om, nws_spd):
     start = datetime(d.year, d.month, d.day) - timedelta(hours=4)
     pop = [x for x in (pick(om.get('nws_pop', {}), 'precipitation_probability', start + timedelta(hours=h)) for h in range(15))
            if x is not None]
+    vis = [om['visibility'].get(t) for t in hours]
+    vis = [v for v in vis if v is not None]
     return (round(sum(wind) / len(wind)) if wind else None, round(max(gust)) if gust else None,
-            round(max(pop)) if pop else None)
+            round(max(pop)) if pop else None, round(min(vis) / 1609.34, 1) if vis else None)
 
 
 def build(now=None):
@@ -176,7 +180,8 @@ def build(now=None):
         start = datetime(d.year, d.month, d.day) - timedelta(hours=4)
         rain_in = sum(om['precipitation'].get(start + timedelta(hours=h)) or 0 for h in range(10))
         t = tmax.get(d)
-        m_wind, m_gust, rain_pct = morning_conditions(d, om, nws_spd)
+        m_wind, m_gust, rain_pct, vis_mi = morning_conditions(d, om, nws_spd)
+        sunrise = om['sunrise'].get(d)
         if None in (mph, dp, t):
             p, note = 0.0, 'No forecast yet'
             good, bad = [], []
@@ -192,7 +197,8 @@ def build(now=None):
             note=note, summary=summary, within_48h=i <= 1,
             night_wind_mph=None if mph is None else round(mph, 1), night_wind_from=nd, night_wind_deg=None if nd is None else round(deg), wind_source=src,
             pressure_change_hpa=None if dp is None else round(dp, 1), max_temp_f=None if t is None else round(t),
-            rain_overnight_in=round(rain_in, 2), morning_wind_mph=m_wind, morning_gust_mph=m_gust, rain_pct=rain_pct))
+            rain_overnight_in=round(rain_in, 2), morning_wind_mph=m_wind, morning_gust_mph=m_gust, rain_pct=rain_pct,
+            morning_vis_mi=vis_mi, sunrise=sunrise.strftime('%-I:%M') if sunrise else None))
     return dict(
         generated=now.astimezone(timezone.utc).isoformat(timespec='minutes'),
         generated_local=now.strftime('%a %b %-d, %-I:%M %p'),

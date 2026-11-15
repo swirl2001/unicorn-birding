@@ -59,7 +59,7 @@
   .meter { position: relative; height: 84px; margin: 12px auto 10px; width: 14px; border-radius: 99px; background: var(--rule); overflow: hidden; }
   .meter i { position: absolute; left: 0; right: 0; bottom: 0; height: var(--p, 0%); background: var(--gold); border-radius: 99px; }
   .day .pct { font-family: var(--serif); font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums; }
-  .day .note { font-size: 12px; color: var(--pencil); margin-top: 4px; line-height: 1.35; }
+  .day .note { font-size: 12px; color: var(--ink); margin-top: 4px; line-height: 1.35; }
   .day.best { background: var(--gold-soft); }
   .day.blank .meter { opacity: .45; }
 
@@ -252,7 +252,10 @@
     rain: svg('<path d="M8 2s4 4.6 4 7.6A4 4 0 0 1 4 9.6C4 6.6 8 2 8 2z"/>'),
     temp: svg('<path d="M6.5 9.3V3.5a1.5 1.5 0 0 1 3 0v5.8a3 3 0 1 1-3 0z"/><path d="M8 11.5V7"/>'),
     gauge: svg('<path d="M2.5 11a5.5 5.5 0 1 1 11 0"/><path d="M8 11l2.6-3"/><path d="M2.5 13.5h11"/>'),
+    fog: svg('<path d="M2 5.5h12"/><path d="M3.5 8.5h9"/><path d="M2 11.5h12"/>'),
+    sunrise: svg('<path d="M4.5 11a3.5 3.5 0 0 1 7 0"/><path d="M1.5 13.5h13"/><path d="M8 2.5v3"/><path d="M6.3 4.2L8 2.5l1.7 1.7"/><path d="M2.6 8.2l1.2.7M13.4 8.2l-1.2.7"/>'),
   };
+  const sky = (v) => (v == null ? null : v < 0.6 ? 'Fog' : v < 3 ? 'Hazy' : 'Clear');
   const trend = (dp) => (dp == null ? '–' : dp >= 1 ? 'Rising' : dp <= -1 ? 'Falling' : 'Steady');
   function facts(d) {
     const out = [];
@@ -261,6 +264,8 @@
     if (d.rain_pct != null) out.push(`<span title="Chance of rain, overnight to 11 am">${ICON.rain}${d.rain_pct}%</span>`);
     if (d.max_temp_f != null) out.push(`<span title="High temperature">${ICON.temp}${d.max_temp_f}°</span>`);
     if (d.pressure_change_hpa != null) out.push(`<span title="Barometer vs. yesterday morning (${d.pressure_change_hpa > 0 ? '+' : ''}${d.pressure_change_hpa} hPa)">${ICON.gauge}${trend(d.pressure_change_hpa)}</span>`);
+    if (d.morning_vis_mi != null) out.push(`<span title="Morning visibility at the Gate, 6–11 am (${d.morning_vis_mi} mi)">${ICON.fog}${sky(d.morning_vis_mi)}</span>`);
+    if (d.sunrise) out.push(`<span title="Sunrise">${ICON.sunrise}${d.sunrise} am</span>`);
     return out.length ? `<div class="facts">${out.join('')}</div>` : '';
   }
 
@@ -271,14 +276,15 @@
         <div><div class="dow">${d.dow}</div><div class="date">${d.date}</div></div>
         <div class="meter"><i style="--p:${blank ? 0 : barFill(d.chance)}%"></i></div>
         <div class="pct">${blank ? '–' : pct(d.chance)}</div>
+        ${!blank && d.note ? `<div class="note">${d.note}</div>` : ''}
         ${!blank && d.night_wind_mph != null ? `<div class="wind" title="Overnight wind (8 pm–6 am)">${compass(d.night_wind_deg)}<span>${windLabel(d.night_wind_deg, d.night_wind_mph)}</span></div>` : ''}
         ${!blank ? facts(d) : ''}
-        ${!blank && d.note ? `<div class="note">${d.note}</div>` : ''}
       </div>`).join('');
     const legend = $('legend');
     if (!blank) {
       legend.innerHTML = `<span>${compass(180)}Overnight wind</span><span>${ICON.wind}Morning wind</span><span>${ICON.gust}Gusts</span>`
-        + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span><span>${ICON.gauge}Barometer</span>`;
+        + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span><span>${ICON.gauge}Barometer</span>`
+        + `<span>${ICON.fog}Morning visibility</span><span>${ICON.sunrise}Sunrise</span>`;
       legend.hidden = false;
     }
   }
