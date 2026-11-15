@@ -2,6 +2,8 @@
  {
   "kind": "Biggest checklist in 10 years",
   "season": "spring",
+  "group": "records",
+  "wx_source": "Golden Gate stations",
   "date": "2024-05-09",
   "sub": "S173104816",
   "url": "https://ebird.org/checklist/S173104816",
@@ -22,7 +24,7 @@
    "high_f": 83,
    "pressure_change_hpa": -2.9,
    "rain": false,
-   "fog": false
+   "fog": null
   },
   "top": [
    {
@@ -70,7 +72,7 @@
    "Close to 100 songbirds at a time swirled over the toll plaza, reluctant to cross the Gate.",
    "About 20 birders on the battery, and the extra eyes turned up rarities like Bank Swallow and Solitary Sandpiper."
   ],
-  "birded_days": 948,
+  "birded_days": 994,
   "species": [
    {
     "name": "Greater White-fronted Goose",
@@ -497,6 +499,8 @@
  {
   "kind": "Best fall day",
   "season": "fall",
+  "group": "records",
+  "wx_source": "Golden Gate stations",
   "date": "2020-10-26",
   "sub": "S75452945",
   "url": "https://ebird.org/checklist/S75452945",
@@ -540,7 +544,7 @@
    },
    {
     "name": "Great Horned Owl",
-    "days": 8
+    "days": 9
    },
    {
     "name": "Redhead",
@@ -565,7 +569,7 @@
    "Late October brings a different mix from spring: ducks, geese, terns and sparrows instead of buntings and tanagers.",
    "Yellow-rumped Warblers pushed through early, Purple Finches kept coming later, and duck flocks peaked around 10 am."
   ],
-  "birded_days": 948,
+  "birded_days": 994,
   "species": [
    {
     "name": "Snow Goose",
@@ -984,6 +988,8 @@
  {
   "kind": "Best spring day (besides May 9, 2024)",
   "season": "spring",
+  "group": "records",
+  "wx_source": "Golden Gate stations",
   "date": "2022-04-07",
   "sub": "S106491033",
   "url": "https://ebird.org/checklist/S106491033",
@@ -1023,15 +1029,15 @@
   "rare": [
    {
     "name": "Ash-throated Flycatcher",
-    "days": 5
+    "days": 6
    },
    {
     "name": "Purple Martin",
-    "days": 8
+    "days": 10
    },
    {
     "name": "Lawrence's Goldfinch",
-    "days": 12
+    "days": 13
    },
    {
     "name": "Lark Sparrow",
@@ -1039,11 +1045,11 @@
    },
    {
     "name": "Belted Kingfisher",
-    "days": 15
+    "days": 16
    },
    {
-    "name": "Swainson's Hawk",
-    "days": 17
+    "name": "Hermit Warbler",
+    "days": 19
    }
   ],
   "insights": [
@@ -1052,7 +1058,7 @@
    "A hawk watch drew more birders as the day went on; Swainson's Hawk was one of the prizes.",
    "Early April mixes lingering winter birds (Surf Scoters, Yellow-rumped Warblers) with the first spring arrivals, so variety runs high."
   ],
-  "birded_days": 948,
+  "birded_days": 994,
   "species": [
    {
     "name": "Brant",
@@ -1441,6 +1447,1269 @@
    {
     "name": "Lazuli Bunting",
     "count": 3
+   }
+  ]
+ },
+ {
+  "kind": "Fall 2026",
+  "season": "fall",
+  "group": "recent",
+  "wx_source": "Open-Meteo archive (modeled)",
+  "date": "2026-10-16",
+  "sub": "S402902254",
+  "url": "https://ebird.org/checklist/S402902254",
+  "observer": "Joachim Gonzalez",
+  "observers": 1,
+  "hours": 8.0,
+  "start": "07:07",
+  "lists_that_day": 10,
+  "species_count": 96,
+  "weather": {
+   "night_wind_deg": 48,
+   "night_wind_mph": 2,
+   "morning_wind_deg": 102,
+   "morning_wind_mph": 3,
+   "morning_gust_mph": 11,
+   "night_wind": "northeast 2 mph",
+   "morning_wind": "east 3 mph, gusts 11",
+   "high_f": 91,
+   "pressure_change_hpa": -2.2,
+   "rain": false,
+   "fog": null
+  },
+  "top": [
+   {
+    "name": "Violet-green Swallow",
+    "count": 584
+   },
+   {
+    "name": "Brown Pelican",
+    "count": 454
+   },
+   {
+    "name": "Brandt's Cormorant",
+    "count": 135
+   }
+  ],
+  "rare": [
+   {
+    "name": "Sandhill Crane",
+    "days": 1
+   },
+   {
+    "name": "Lapland Longspur",
+    "days": 7
+   },
+   {
+    "name": "Townsend's Solitaire",
+    "days": 9
+   },
+   {
+    "name": "Cocos Booby",
+    "days": 10
+   },
+   {
+    "name": "Canvasback",
+    "days": 18
+   }
+  ],
+  "insights": [
+   "Clear, with a 5\u201310 mph northeast breeze off the land from midnight until it flipped onshore at 12:50 pm. Temperatures climbed from the 60s to near 80.",
+   "A Sandhill Crane flew over on a heads-up from another birder, one of very few ever seen in San Francisco.",
+   "An immature Cocos Booby, a tropical seabird, foraged in the channel and was photographed.",
+   "Waterfowl and shorebirds on the move: Greater Scaup flocks with a Canvasback and a Gadwall, plus Marbled Godwits and Dunlin."
+  ],
+  "birded_days": 994,
+  "species": [
+   {
+    "name": "Cackling Goose",
+    "count": 21
+   },
+   {
+    "name": "Northern Shoveler",
+    "count": 10
+   },
+   {
+    "name": "Gadwall",
+    "count": 1
+   },
+   {
+    "name": "Northern Pintail",
+    "count": 16
+   },
+   {
+    "name": "Canvasback",
+    "count": 1
+   },
+   {
+    "name": "Greater Scaup",
+    "count": 96
+   },
+   {
+    "name": "Lesser Scaup",
+    "count": 1
+   },
+   {
+    "name": "Surf Scoter",
+    "count": 23
+   },
+   {
+    "name": "Rock Pigeon",
+    "count": 5
+   },
+   {
+    "name": "Band-tailed Pigeon",
+    "count": 82
+   },
+   {
+    "name": "Mourning Dove",
+    "count": 1
+   },
+   {
+    "name": "Anna's Hummingbird",
+    "count": 4
+   },
+   {
+    "name": "Sandhill Crane",
+    "count": 1
+   },
+   {
+    "name": "Black Oystercatcher",
+    "count": 2
+   },
+   {
+    "name": "Hudsonian Whimbrel",
+    "count": 1
+   },
+   {
+    "name": "Marbled Godwit",
+    "count": 36
+   },
+   {
+    "name": "Prairie Willet",
+    "count": 5
+   },
+   {
+    "name": "Black Turnstone",
+    "count": 13
+   },
+   {
+    "name": "Dunlin",
+    "count": 17
+   },
+   {
+    "name": "Western Sandpiper",
+    "count": 1
+   },
+   {
+    "name": "Parasitic Jaeger",
+    "count": 1
+   },
+   {
+    "name": "Common Murre",
+    "count": 2
+   },
+   {
+    "name": "Heermann's Gull",
+    "count": 3
+   },
+   {
+    "name": "Short-billed Gull",
+    "count": 1
+   },
+   {
+    "name": "Western Gull",
+    "count": 105
+   },
+   {
+    "name": "American Herring Gull",
+    "count": 4
+   },
+   {
+    "name": "California Gull",
+    "count": 62
+   },
+   {
+    "name": "Glaucous-winged Gull",
+    "count": 4
+   },
+   {
+    "name": "Elegant Tern",
+    "count": 49
+   },
+   {
+    "name": "Western Grebe",
+    "count": 3
+   },
+   {
+    "name": "Common Loon",
+    "count": 1
+   },
+   {
+    "name": "Cocos Booby",
+    "count": 1
+   },
+   {
+    "name": "Brandt's Cormorant",
+    "count": 135
+   },
+   {
+    "name": "Pelagic Cormorant",
+    "count": 4
+   },
+   {
+    "name": "Double-crested Cormorant",
+    "count": 14
+   },
+   {
+    "name": "Snowy Egret",
+    "count": 2
+   },
+   {
+    "name": "Great Blue Heron",
+    "count": 2
+   },
+   {
+    "name": "Brown Pelican",
+    "count": 454
+   },
+   {
+    "name": "Turkey Vulture",
+    "count": 10
+   },
+   {
+    "name": "Osprey",
+    "count": 1
+   },
+   {
+    "name": "White-tailed Kite",
+    "count": 1
+   },
+   {
+    "name": "Sharp-shinned Hawk",
+    "count": 7
+   },
+   {
+    "name": "Cooper's Hawk",
+    "count": 3
+   },
+   {
+    "name": "Northern Harrier",
+    "count": 2
+   },
+   {
+    "name": "Broad-winged Hawk",
+    "count": 1
+   },
+   {
+    "name": "Red-shouldered Hawk",
+    "count": 2
+   },
+   {
+    "name": "Red-tailed Hawk",
+    "count": 42
+   },
+   {
+    "name": "Downy Woodpecker",
+    "count": 1
+   },
+   {
+    "name": "Nuttall's Woodpecker",
+    "count": 1
+   },
+   {
+    "name": "Northern Flicker",
+    "count": 8
+   },
+   {
+    "name": "American Kestrel",
+    "count": 2
+   },
+   {
+    "name": "Merlin",
+    "count": 2
+   },
+   {
+    "name": "Peregrine Falcon",
+    "count": 1
+   },
+   {
+    "name": "Black Phoebe",
+    "count": 2
+   },
+   {
+    "name": "Say's Phoebe",
+    "count": 2
+   },
+   {
+    "name": "Steller's Jay",
+    "count": 2
+   },
+   {
+    "name": "California Scrub-Jay",
+    "count": 1
+   },
+   {
+    "name": "American Crow",
+    "count": 16
+   },
+   {
+    "name": "Common Raven",
+    "count": 21
+   },
+   {
+    "name": "Chestnut-backed Chickadee",
+    "count": 2
+   },
+   {
+    "name": "Tree Swallow",
+    "count": 1
+   },
+   {
+    "name": "Violet-green Swallow",
+    "count": 584
+   },
+   {
+    "name": "Bushtit",
+    "count": 14
+   },
+   {
+    "name": "Ruby-crowned Kinglet",
+    "count": 2
+   },
+   {
+    "name": "Pygmy Nuthatch",
+    "count": 5
+   },
+   {
+    "name": "Red-breasted Nuthatch",
+    "count": 5
+   },
+   {
+    "name": "Brown Creeper",
+    "count": 1
+   },
+   {
+    "name": "Northern House Wren",
+    "count": 2
+   },
+   {
+    "name": "Bewick's Wren",
+    "count": 1
+   },
+   {
+    "name": "European Starling",
+    "count": 2
+   },
+   {
+    "name": "Western Bluebird",
+    "count": 12
+   },
+   {
+    "name": "Townsend's Solitaire",
+    "count": 1
+   },
+   {
+    "name": "Varied Thrush",
+    "count": 31
+   },
+   {
+    "name": "Hermit Thrush",
+    "count": 2
+   },
+   {
+    "name": "American Robin",
+    "count": 10
+   },
+   {
+    "name": "Cedar Waxwing",
+    "count": 30
+   },
+   {
+    "name": "American Pipit",
+    "count": 26
+   },
+   {
+    "name": "House Finch",
+    "count": 53
+   },
+   {
+    "name": "Purple Finch",
+    "count": 12
+   },
+   {
+    "name": "Pine Siskin",
+    "count": 83
+   },
+   {
+    "name": "Lesser Goldfinch",
+    "count": 7
+   },
+   {
+    "name": "American Goldfinch",
+    "count": 6
+   },
+   {
+    "name": "Lapland Longspur",
+    "count": 1
+   },
+   {
+    "name": "Fox Sparrow",
+    "count": 2
+   },
+   {
+    "name": "Dark-eyed Junco",
+    "count": 3
+   },
+   {
+    "name": "White-crowned Sparrow",
+    "count": 4
+   },
+   {
+    "name": "Golden-crowned Sparrow",
+    "count": 1
+   },
+   {
+    "name": "Song Sparrow",
+    "count": 2
+   },
+   {
+    "name": "Lincoln's Sparrow",
+    "count": 1
+   },
+   {
+    "name": "California Towhee",
+    "count": 1
+   },
+   {
+    "name": "Western Meadowlark",
+    "count": 17
+   },
+   {
+    "name": "Tricolored Blackbird",
+    "count": 6
+   },
+   {
+    "name": "Brewer's Blackbird",
+    "count": 7
+   },
+   {
+    "name": "Great-tailed Grackle",
+    "count": 2
+   },
+   {
+    "name": "Yellow-rumped Warbler",
+    "count": 44
+   },
+   {
+    "name": "Townsend's Warbler",
+    "count": 11
+   }
+  ]
+ },
+ {
+  "kind": "Fall 2026",
+  "season": "fall",
+  "group": "recent",
+  "wx_source": "Open-Meteo archive (modeled)",
+  "date": "2026-10-24",
+  "sub": "S405157915",
+  "url": "https://ebird.org/checklist/S405157915",
+  "observer": "Tijmen Blankevoort",
+  "observers": 9,
+  "hours": 6.0,
+  "start": "07:05",
+  "lists_that_day": 10,
+  "species_count": 93,
+  "weather": {
+   "night_wind_deg": 20,
+   "night_wind_mph": 1,
+   "morning_wind_deg": 120,
+   "morning_wind_mph": 2,
+   "morning_gust_mph": 8,
+   "night_wind": "north 1 mph",
+   "morning_wind": "southeast 2 mph, gusts 8",
+   "high_f": 70,
+   "pressure_change_hpa": -0.2,
+   "rain": false,
+   "fog": null
+  },
+  "top": [
+   {
+    "name": "Band-tailed Pigeon",
+    "count": 2565
+   },
+   {
+    "name": "Brown Pelican",
+    "count": 1645
+   },
+   {
+    "name": "Varied Thrush",
+    "count": 988
+   }
+  ],
+  "rare": [
+   {
+    "name": "Tropical Kingbird",
+    "days": 6
+   },
+   {
+    "name": "White-throated Sparrow",
+    "days": 10
+   }
+  ],
+  "insights": [
+   "Light northeast winds, clear skies and temperatures in the 60s: another offshore-wind morning.",
+   "A strong songbird flight, mostly thrushes and pipits, until about 9:30 am.",
+   "A big flicker flight, with 20 moving together at once, including Yellow-shafted and intergrade birds.",
+   "Huge totals: 2,565 Band-tailed Pigeons in flocks of hundreds, 1,645 Brown Pelicans, and a raptor push from 11:30 am."
+  ],
+  "birded_days": 994,
+  "species": [
+   {
+    "name": "Cackling Goose",
+    "count": 15
+   },
+   {
+    "name": "American Wigeon",
+    "count": 9
+   },
+   {
+    "name": "Mallard",
+    "count": 7
+   },
+   {
+    "name": "Northern Pintail",
+    "count": 2
+   },
+   {
+    "name": "Greater Scaup",
+    "count": 12
+   },
+   {
+    "name": "Surf Scoter",
+    "count": 107
+   },
+   {
+    "name": "Band-tailed Pigeon",
+    "count": 2565
+   },
+   {
+    "name": "Anna's Hummingbird",
+    "count": 5
+   },
+   {
+    "name": "Black Oystercatcher",
+    "count": 2
+   },
+   {
+    "name": "Killdeer",
+    "count": 4
+   },
+   {
+    "name": "Marbled Godwit",
+    "count": 1
+   },
+   {
+    "name": "Black Turnstone",
+    "count": 16
+   },
+   {
+    "name": "Sanderling",
+    "count": 180
+   },
+   {
+    "name": "Dunlin",
+    "count": 8
+   },
+   {
+    "name": "Common Murre",
+    "count": 8
+   },
+   {
+    "name": "Bonaparte's Gull",
+    "count": 6
+   },
+   {
+    "name": "Heermann's Gull",
+    "count": 12
+   },
+   {
+    "name": "Short-billed Gull",
+    "count": 28
+   },
+   {
+    "name": "Ring-billed Gull",
+    "count": 1
+   },
+   {
+    "name": "Western Gull",
+    "count": 120
+   },
+   {
+    "name": "American Herring Gull",
+    "count": 2
+   },
+   {
+    "name": "California Gull",
+    "count": 25
+   },
+   {
+    "name": "Glaucous-winged Gull",
+    "count": 5
+   },
+   {
+    "name": "Elegant Tern",
+    "count": 70
+   },
+   {
+    "name": "Western Grebe",
+    "count": 8
+   },
+   {
+    "name": "Red-throated Loon",
+    "count": 1
+   },
+   {
+    "name": "Common Loon",
+    "count": 7
+   },
+   {
+    "name": "Brandt's Cormorant",
+    "count": 300
+   },
+   {
+    "name": "Pelagic Cormorant",
+    "count": 1
+   },
+   {
+    "name": "Double-crested Cormorant",
+    "count": 6
+   },
+   {
+    "name": "Great Blue Heron",
+    "count": 1
+   },
+   {
+    "name": "Brown Pelican",
+    "count": 1645
+   },
+   {
+    "name": "Turkey Vulture",
+    "count": 6
+   },
+   {
+    "name": "Osprey",
+    "count": 1
+   },
+   {
+    "name": "Sharp-shinned Hawk",
+    "count": 2
+   },
+   {
+    "name": "Cooper's Hawk",
+    "count": 1
+   },
+   {
+    "name": "Northern Harrier",
+    "count": 1
+   },
+   {
+    "name": "Red-shouldered Hawk",
+    "count": 3
+   },
+   {
+    "name": "Red-tailed Hawk",
+    "count": 23
+   },
+   {
+    "name": "Red-breasted Sapsucker",
+    "count": 1
+   },
+   {
+    "name": "Nuttall's Woodpecker",
+    "count": 1
+   },
+   {
+    "name": "Hairy Woodpecker",
+    "count": 1
+   },
+   {
+    "name": "Northern Flicker",
+    "count": 54
+   },
+   {
+    "name": "American Kestrel",
+    "count": 2
+   },
+   {
+    "name": "Merlin",
+    "count": 3
+   },
+   {
+    "name": "Peregrine Falcon",
+    "count": 3
+   },
+   {
+    "name": "Black Phoebe",
+    "count": 2
+   },
+   {
+    "name": "Say's Phoebe",
+    "count": 1
+   },
+   {
+    "name": "Tropical Kingbird",
+    "count": 2
+   },
+   {
+    "name": "Hutton's Vireo",
+    "count": 1
+   },
+   {
+    "name": "Steller's Jay",
+    "count": 2
+   },
+   {
+    "name": "California Scrub-Jay",
+    "count": 1
+   },
+   {
+    "name": "American Crow",
+    "count": 6
+   },
+   {
+    "name": "Common Raven",
+    "count": 19
+   },
+   {
+    "name": "Chestnut-backed Chickadee",
+    "count": 4
+   },
+   {
+    "name": "Tree Swallow",
+    "count": 5
+   },
+   {
+    "name": "Violet-green Swallow",
+    "count": 2
+   },
+   {
+    "name": "Bushtit",
+    "count": 21
+   },
+   {
+    "name": "Ruby-crowned Kinglet",
+    "count": 4
+   },
+   {
+    "name": "Golden-crowned Kinglet",
+    "count": 2
+   },
+   {
+    "name": "Pygmy Nuthatch",
+    "count": 8
+   },
+   {
+    "name": "Red-breasted Nuthatch",
+    "count": 7
+   },
+   {
+    "name": "Northern House Wren",
+    "count": 2
+   },
+   {
+    "name": "Bewick's Wren",
+    "count": 1
+   },
+   {
+    "name": "European Starling",
+    "count": 20
+   },
+   {
+    "name": "Western Bluebird",
+    "count": 14
+   },
+   {
+    "name": "Varied Thrush",
+    "count": 988
+   },
+   {
+    "name": "Hermit Thrush",
+    "count": 5
+   },
+   {
+    "name": "American Robin",
+    "count": 106
+   },
+   {
+    "name": "Cedar Waxwing",
+    "count": 18
+   },
+   {
+    "name": "American Pipit",
+    "count": 336
+   },
+   {
+    "name": "House Finch",
+    "count": 72
+   },
+   {
+    "name": "Purple Finch",
+    "count": 43
+   },
+   {
+    "name": "Red Crossbill",
+    "count": 15
+   },
+   {
+    "name": "Pine Siskin",
+    "count": 152
+   },
+   {
+    "name": "Lesser Goldfinch",
+    "count": 13
+   },
+   {
+    "name": "American Goldfinch",
+    "count": 3
+   },
+   {
+    "name": "Fox Sparrow",
+    "count": 3
+   },
+   {
+    "name": "Dark-eyed Junco",
+    "count": 6
+   },
+   {
+    "name": "White-crowned Sparrow",
+    "count": 7
+   },
+   {
+    "name": "Golden-crowned Sparrow",
+    "count": 2
+   },
+   {
+    "name": "White-throated Sparrow",
+    "count": 1
+   },
+   {
+    "name": "Song Sparrow",
+    "count": 2
+   },
+   {
+    "name": "Lincoln's Sparrow",
+    "count": 1
+   },
+   {
+    "name": "California Towhee",
+    "count": 2
+   },
+   {
+    "name": "Western Meadowlark",
+    "count": 1
+   },
+   {
+    "name": "Red-winged Blackbird",
+    "count": 2
+   },
+   {
+    "name": "Brewer's Blackbird",
+    "count": 3
+   },
+   {
+    "name": "Great-tailed Grackle",
+    "count": 1
+   },
+   {
+    "name": "Orange-crowned Warbler",
+    "count": 1
+   },
+   {
+    "name": "Yellow-rumped Warbler",
+    "count": 62
+   },
+   {
+    "name": "Townsend's Warbler",
+    "count": 5
+   },
+   {
+    "name": "Western Tanager",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "kind": "Best spring 2026 checklist",
+  "season": "spring",
+  "group": "recent",
+  "wx_source": "Open-Meteo archive (modeled)",
+  "date": "2026-04-04",
+  "sub": "S317091626",
+  "url": "https://ebird.org/checklist/S317091626",
+  "observer": "Liam Murphy",
+  "observers": 16,
+  "hours": 8.2,
+  "start": "06:47",
+  "lists_that_day": 19,
+  "species_count": 78,
+  "weather": {
+   "night_wind_deg": 41,
+   "night_wind_mph": 3,
+   "morning_wind_deg": 49,
+   "morning_wind_mph": 7,
+   "morning_gust_mph": 22,
+   "night_wind": "northeast 3 mph",
+   "morning_wind": "northeast 7 mph, gusts 22",
+   "high_f": 81,
+   "pressure_change_hpa": -0.8,
+   "rain": false,
+   "fog": null
+  },
+  "top": [
+   {
+    "name": "Brandt's Cormorant",
+    "count": 1600
+   },
+   {
+    "name": "Elegant Tern",
+    "count": 400
+   },
+   {
+    "name": "Band-tailed Pigeon",
+    "count": 298
+   }
+  ],
+  "rare": [
+   {
+    "name": "Wilson's Snipe",
+    "days": 7
+   },
+   {
+    "name": "Lawrence's Goldfinch",
+    "days": 13
+   }
+  ],
+  "insights": [
+   "An \"offshore wind event\": a steady 5\u201310 mph east-northeast wind all morning, sun and highs in the upper 70s.",
+   "Whimbrels and Long-billed Curlews flew out the Gate early, while 400 Elegant Terns fed in the channel.",
+   "An early Vaux's Swift in active northbound migration, and five Wilson's Snipe confirmed from photos.",
+   "16 birders on the battery. Activity was steady all day, though slower than hoped for such good conditions."
+  ],
+  "birded_days": 994,
+  "species": [
+   {
+    "name": "Canada Goose",
+    "count": 5
+   },
+   {
+    "name": "Mallard",
+    "count": 3
+   },
+   {
+    "name": "Surf Scoter",
+    "count": 58
+   },
+   {
+    "name": "Rock Pigeon",
+    "count": 1
+   },
+   {
+    "name": "Band-tailed Pigeon",
+    "count": 298
+   },
+   {
+    "name": "Eurasian Collared-Dove",
+    "count": 7
+   },
+   {
+    "name": "Mourning Dove",
+    "count": 1
+   },
+   {
+    "name": "Vaux's Swift",
+    "count": 1
+   },
+   {
+    "name": "White-throated Swift",
+    "count": 4
+   },
+   {
+    "name": "Anna's Hummingbird",
+    "count": 5
+   },
+   {
+    "name": "Black Oystercatcher",
+    "count": 2
+   },
+   {
+    "name": "Hudsonian Whimbrel",
+    "count": 64
+   },
+   {
+    "name": "Long-billed Curlew",
+    "count": 5
+   },
+   {
+    "name": "Wilson's Snipe",
+    "count": 5
+   },
+   {
+    "name": "Prairie Willet",
+    "count": 10
+   },
+   {
+    "name": "Black Turnstone",
+    "count": 1
+   },
+   {
+    "name": "Pigeon Guillemot",
+    "count": 2
+   },
+   {
+    "name": "Common Murre",
+    "count": 15
+   },
+   {
+    "name": "Heermann's Gull",
+    "count": 2
+   },
+   {
+    "name": "Western Gull",
+    "count": 75
+   },
+   {
+    "name": "California Gull",
+    "count": 125
+   },
+   {
+    "name": "Caspian Tern",
+    "count": 4
+   },
+   {
+    "name": "Elegant Tern",
+    "count": 400
+   },
+   {
+    "name": "Western Grebe",
+    "count": 107
+   },
+   {
+    "name": "Red-throated Loon",
+    "count": 14
+   },
+   {
+    "name": "Brandt's Cormorant",
+    "count": 1600
+   },
+   {
+    "name": "Double-crested Cormorant",
+    "count": 10
+   },
+   {
+    "name": "Snowy Egret",
+    "count": 5
+   },
+   {
+    "name": "Brown Pelican",
+    "count": 23
+   },
+   {
+    "name": "Turkey Vulture",
+    "count": 24
+   },
+   {
+    "name": "Osprey",
+    "count": 2
+   },
+   {
+    "name": "Sharp-shinned Hawk",
+    "count": 10
+   },
+   {
+    "name": "Bald Eagle",
+    "count": 1
+   },
+   {
+    "name": "Red-shouldered Hawk",
+    "count": 3
+   },
+   {
+    "name": "Swainson's Hawk",
+    "count": 2
+   },
+   {
+    "name": "Red-tailed Hawk",
+    "count": 20
+   },
+   {
+    "name": "Nuttall's Woodpecker",
+    "count": 2
+   },
+   {
+    "name": "Northern Flicker",
+    "count": 1
+   },
+   {
+    "name": "Peregrine Falcon",
+    "count": 1
+   },
+   {
+    "name": "Black Phoebe",
+    "count": 1
+   },
+   {
+    "name": "Western Kingbird",
+    "count": 16
+   },
+   {
+    "name": "American Crow",
+    "count": 9
+   },
+   {
+    "name": "Common Raven",
+    "count": 16
+   },
+   {
+    "name": "Chestnut-backed Chickadee",
+    "count": 1
+   },
+   {
+    "name": "Violet-green Swallow",
+    "count": 23
+   },
+   {
+    "name": "Northern Rough-winged Swallow",
+    "count": 4
+   },
+   {
+    "name": "Barn Swallow",
+    "count": 6
+   },
+   {
+    "name": "Cliff Swallow",
+    "count": 6
+   },
+   {
+    "name": "Bushtit",
+    "count": 2
+   },
+   {
+    "name": "Pygmy Nuthatch",
+    "count": 3
+   },
+   {
+    "name": "European Starling",
+    "count": 4
+   },
+   {
+    "name": "Western Bluebird",
+    "count": 2
+   },
+   {
+    "name": "Hermit Thrush",
+    "count": 1
+   },
+   {
+    "name": "American Robin",
+    "count": 9
+   },
+   {
+    "name": "Cedar Waxwing",
+    "count": 61
+   },
+   {
+    "name": "House Finch",
+    "count": 9
+   },
+   {
+    "name": "Purple Finch",
+    "count": 12
+   },
+   {
+    "name": "Pine Siskin",
+    "count": 3
+   },
+   {
+    "name": "Lesser Goldfinch",
+    "count": 12
+   },
+   {
+    "name": "Lawrence's Goldfinch",
+    "count": 1
+   },
+   {
+    "name": "American Goldfinch",
+    "count": 3
+   },
+   {
+    "name": "Chipping Sparrow",
+    "count": 1
+   },
+   {
+    "name": "Fox Sparrow",
+    "count": 2
+   },
+   {
+    "name": "Dark-eyed Junco",
+    "count": 3
+   },
+   {
+    "name": "White-crowned Sparrow",
+    "count": 5
+   },
+   {
+    "name": "Savannah Sparrow",
+    "count": 1
+   },
+   {
+    "name": "Song Sparrow",
+    "count": 4
+   },
+   {
+    "name": "California Towhee",
+    "count": 2
+   },
+   {
+    "name": "Spotted Towhee",
+    "count": 1
+   },
+   {
+    "name": "Hooded Oriole",
+    "count": 1
+   },
+   {
+    "name": "Red-winged Blackbird",
+    "count": 1
+   },
+   {
+    "name": "Brown-headed Cowbird",
+    "count": 8
+   },
+   {
+    "name": "Yellow-rumped Warbler",
+    "count": 47
+   },
+   {
+    "name": "Black-throated Gray Warbler",
+    "count": 1
+   },
+   {
+    "name": "Townsend's Warbler",
+    "count": 2
+   },
+   {
+    "name": "Wilson's Warbler",
+    "count": 1
+   },
+   {
+    "name": "Black-headed Grosbeak",
+    "count": 1
+   },
+   {
+    "name": "Lazuli Bunting",
+    "count": 6
    }
   ]
  }

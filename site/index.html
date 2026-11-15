@@ -202,6 +202,12 @@
     <div class="records" id="records"></div>
   </section>
 
+  <section id="recent-section" hidden>
+    <h2>Other recent high days</h2>
+    <p class="muted" style="margin:0 0 14px">Big checklists from 2026, the first year since the forecast's 10-year history.</p>
+    <div class="records" id="recent"></div>
+  </section>
+
   <footer>
     <p id="updated"></p>
     <p>Bird history: <a href="https://ebird.org/hotspot/L999240">eBird</a>, Cornell Lab of Ornithology, from the checklists of everyone who birds Battery Godfrey. Weather: <a href="https://www.weather.gov/mtr/">National Weather Service</a>, NOAA and <a href="https://open-meteo.com/">Open-Meteo</a>.</p>
@@ -339,7 +345,7 @@
   const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const fmtTime = (t) => { const [h, m] = t.split(':').map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`; };
   fetch('examples.json', { cache: 'no-store' }).then((r) => r.json()).then((list) => {
-    $('records').innerHTML = list.map((e) => {
+    const card = (e) => {
       const w = e.weather;
       const others = e.observers > 1 ? ` and ${e.observers - 1} other birders` : '';
       return `<article class="sheet rec">
@@ -351,7 +357,7 @@
           <li class="windchip">${compass(w.morning_wind_deg)}<span><b>Morning wind</b>${windLabel(w.morning_wind_deg, w.morning_wind_mph)}, gusts ${w.morning_gust_mph}</span></li>
           <li><b>High</b>${w.high_f}°F</li>
           <li><b>Pressure</b>${w.pressure_change_hpa > 0 ? '+' : ''}${w.pressure_change_hpa} hPa in 24 h</li>
-          <li><b>Sky</b>${w.rain ? 'Rain overnight' : w.fog ? 'Foggy morning' : 'Dry, no fog'}</li>
+          <li><b>Sky</b>${w.rain ? 'Rain overnight' : w.fog ? 'Foggy morning' : w.fog === false ? 'Dry, no fog' : 'Dry'}</li>
         </ul>
         <h4>Most birds</h4>
         <div class="top3">${e.top.map((t) => `<div><strong>${t.count.toLocaleString()}</strong><span>${esc(t.name)}</span></div>`).join('')}</div>
@@ -361,9 +367,12 @@
         <details><summary>All ${e.species_count} species and counts</summary>
           <ul class="all">${e.species.map((s) => `<li>${esc(s.name)}<span>${s.count == null ? 'present' : s.count.toLocaleString()}</span></li>`).join('')}</ul>
         </details>
-        <p class="byline">Checklist by ${esc(e.observer)}${others} · ${e.hours} hours from ${fmtTime(e.start)} · <a href="${e.url}" target="_blank" rel="noopener">View on eBird ↗</a></p>
+        <p class="byline">Checklist by ${esc(e.observer)}${others} · ${e.hours} hours from ${fmtTime(e.start)} ${e.lists_that_day > 1 ? ` · 1 of ${e.lists_that_day} checklists that day` : ''} · <a href="${e.url}" target="_blank" rel="noopener">View on eBird ↗</a>${e.group === 'recent' ? '<br>Weather: modeled by Open-Meteo for Fort Point and SFO.' : ''}</p>
       </article>`;
-    }).join('');
+    };
+    $('records').innerHTML = list.filter((e) => e.group !== 'recent').map(card).join('');
+    const recent = list.filter((e) => e.group === 'recent');
+    if (recent.length) { $('recent').innerHTML = recent.map(card).join(''); $('recent-section').hidden = false; }
   }).catch(() => { $('records').closest('section').hidden = true; });
 </script>
 </body>
