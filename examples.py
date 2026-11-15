@@ -90,6 +90,10 @@ def main():
             observer=c.get('userDisplayName'), observers=c.get('numObservers'), hours=round(num(c.get('durationHrs')) or 0, 1),
             start=c['obsDt'][11:16], lists_that_day=lists_that_day, species_count=len(sp),
             weather=dict(
+                night_wind_deg=None if not compass(num(w['night_wind_dir'])) else round(num(w['night_wind_dir'])),
+                night_wind_mph=round(num(w['night_wind_mph'])),
+                morning_wind_deg=round(num(w['morning_wind_dir'])), morning_wind_mph=round(num(w['morning_wind_mph'])),
+                morning_gust_mph=round(num(w['morning_gust_mph'])),
                 night_wind=f"{compass(num(w['night_wind_dir'])) or 'calm'} {round(num(w['night_wind_mph']))} mph",
                 morning_wind=f"{compass(num(w['morning_wind_dir']))} {round(num(w['morning_wind_mph']))} mph, gusts {round(num(w['morning_gust_mph']))}",
                 high_f=round(num(w['max_temp_f'])), pressure_change_hpa=round(num(w['pressure_change_hpa']), 1),

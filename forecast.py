@@ -9,7 +9,7 @@ Weather, matched to what the model was trained on:
 Writes site/data.json and state.json; emails sign-ups once per date when a day within 48 h is a strong bet.
 Standard library only. Run: python3 forecast.py
 """
-import json, math, os, smtplib, sys, urllib.request
+import json, math, os, smtplib, sys, time, urllib.request
 from datetime import date, datetime, timedelta, timezone
 from email.message import EmailMessage
 from pathlib import Path
@@ -30,9 +30,15 @@ SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
 WORDS = dict(N='north', NE='northeast', E='east', SE='southeast', S='south', SW='southwest', W='west', NW='northwest')
 
 
-def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
-        return json.loads(r.read())
+def get(url, tries=3):
+    for i in range(tries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+                return json.loads(r.read())
+        except Exception:
+            if i == tries - 1:
+                raise
+            time.sleep(10 * (i + 1))
 
 
 def sector(deg):
@@ -165,7 +171,7 @@ def build(now=None):
         days.append(dict(
             dow=d.strftime('%a'), date=d.strftime('%b %-d'), iso=d.isoformat(), label=label, chance=round(p, 4),
             note=note, summary=summary, within_48h=i <= 1,
-            night_wind_mph=None if mph is None else round(mph, 1), night_wind_from=nd, wind_source=src,
+            night_wind_mph=None if mph is None else round(mph, 1), night_wind_from=nd, night_wind_deg=None if nd is None else round(deg), wind_source=src,
             pressure_change_hpa=None if dp is None else round(dp, 1), max_temp_f=None if t is None else round(t),
             rain_overnight_in=round(rain_in, 2)))
     return dict(
