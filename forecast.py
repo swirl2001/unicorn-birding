@@ -238,10 +238,12 @@ def main():
     page = os.environ.get('PAGE_URL', '')
     for d in data['days']:
         if d['within_48h'] and d['chance'] >= ALERT_CHANCE and d['iso'] not in state['alerted']:
-            subject = f"Go birding {d['label']}: Battery Godfrey looks like a unicorn day"
-            body = (f"{d['summary']}\n\n"
-                    f"Chance of a top-5% variety day {d['label']}: {round(d['chance'] * 100)}% "
-                    f"(about {round(d['chance'] / MODEL['base_rate'])}x a normal day). Get there early.\n\n"
+            subject = f"Drop everything and go birding {d['label']}! Unicorn day at Battery Godfrey"
+            body = (f"Skip work. Grab your binoculars. Battery Godfrey looks like a unicorn day {d['label']}.\n\n"
+                    f"{d['summary']}\n\n"
+                    f"Chance of a top-5% variety day: {round(d['chance'] * 100)}% "
+                    f"(about {round(d['chance'] / MODEL['base_rate'])}x a normal day). Get there early: "
+                    f"the big movement is in the first couple of hours after sunrise.\n\n"
                     f"{page}\n\nReply 'stop' to unsubscribe.")
             if send_emails(subject, body) or os.environ.get('MARK_DRY_RUN'):
                 state['alerted'].append(d['iso'])
