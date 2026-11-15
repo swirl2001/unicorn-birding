@@ -151,7 +151,7 @@
 
   <footer>
     <p id="updated"></p>
-    <p>Bird history: <a href="https://ebird.org/hotspot/L999240">eBird</a>, Cornell Lab of Ornithology, from the checklists of everyone who birds Battery Godfrey. Weather: <a href="https://www.weather.gov/mtr/">National Weather Service</a> and NOAA.</p>
+    <p>Bird history: <a href="https://ebird.org/hotspot/L999240">eBird</a>, Cornell Lab of Ornithology, from the checklists of everyone who birds Battery Godfrey. Weather: <a href="https://www.weather.gov/mtr/">National Weather Service</a>, NOAA and <a href="https://open-meteo.com/">Open-Meteo</a>.</p>
     <p>Chances are estimates, not guarantees. Birds do what they want.</p>
   </footer>
 </main>
@@ -197,7 +197,7 @@
       const days = data.days || [];
       const best = days.reduce((a, d) => (!a || d.chance > a.chance ? d : a), null);
       $('best-pct').textContent = best ? pct(best.chance) : '–';
-      if (best && best.chance >= 0.5) {
+      if (best && best.chance >= 0.25) {
         $('outlook').classList.add('go');
         $('outlook-title').textContent = `Play hooky ${best.label}!`;
         $('outlook-text').textContent = best.summary || 'Conditions line up with the best days in Battery Godfrey history.';
