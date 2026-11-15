@@ -376,7 +376,7 @@
         <details><summary>All ${e.species_count} species and counts</summary>
           <ul class="all">${e.species.map((s) => `<li>${esc(s.name)}<span>${s.count == null ? 'present' : s.count.toLocaleString()}</span></li>`).join('')}</ul>
         </details>
-        <p class="byline">Checklist by ${esc(e.observer)}${others} · ${e.hours} hours from ${fmtTime(e.start)} ${e.lists_that_day > 1 ? ` · 1 of ${e.lists_that_day} checklists that day` : ''} · <a href="${e.url}" target="_blank" rel="noopener">View on eBird ↗</a>${e.group === 'recent' ? '<br>Weather: modeled by Open-Meteo for Fort Point and SFO.' : ''}</p>
+        <p class="byline">Checklist by ${esc(e.observer)}${others} · ${e.hours} hours from ${fmtTime(e.start)} ${e.lists_that_day > 1 ? ` · 1 of ${e.lists_that_day} checklists that day` : ''} · <a href="${e.url}" target="_blank" rel="noopener">View on eBird ↗</a>${e.group === 'recent' ? `<br>Weather: ${esc(e.wx_source)}.` : ''}</p>
       </article>`;
     };
     $('records').innerHTML = list.filter((e) => e.group !== 'recent').map(card).join('');

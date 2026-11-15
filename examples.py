@@ -54,7 +54,7 @@ INSIGHTS = {
         'Yellow-rumped Warblers pushed through early, Purple Finches kept coming later, and duck flocks peaked around 10 am.',
     ],
     'S106491033': [
-        'An unusually hot early-April day (high 89°F at SFO) after a nearly calm, southerly night: ideal for migrants to fly.',
+        'An unusually warm early-April day (80°F at Fort Point) after a nearly calm, southerly night: ideal for migrants to fly.',
         'A big morning push of Band-tailed Pigeons (855!) in flock after flock, plus a wave of Whimbrels at dawn.',
         'A hawk watch drew more birders as the day went on; Swainson\'s Hawk was one of the prizes.',
         'Early April mixes lingering winter birds (Surf Scoters, Yellow-rumped Warblers) with the first spring arrivals, so variety runs high.',
@@ -71,9 +71,7 @@ def archive_weather(ds):
     d = date.fromisoformat(ds); d0 = datetime(d.year, d.month, d.day)
     rng = f'&start_date={d - timedelta(days=1)}&end_date={d}'
     fp = json.loads(urllib.request.urlopen(ARCHIVE + rng + '&latitude=37.8106&longitude=-122.4655'
-                    '&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation', timeout=60).read())['hourly']
-    sfo = json.loads(urllib.request.urlopen(ARCHIVE + rng + '&latitude=37.6189&longitude=-122.3750&daily=temperature_2m_max',
-                     timeout=60).read())['daily']
+                    '&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation', timeout=60).read())['hourly']
     H = {datetime.fromisoformat(t): i for i, t in enumerate(fp['time'])}
     def rows(a, b):
         return [H[t] for t in (a + timedelta(hours=h) for h in range(int((b - a).total_seconds() // 3600))) if t in H]
@@ -87,8 +85,58 @@ def archive_weather(ds):
     pm = lambda idx: sum(fp['pressure_msl'][i] for i in idx) / len(idx)
     return dict(night_wind_dir=nd, night_wind_mph=ns, morning_wind_dir=md, morning_wind_mph=ms,
                 morning_gust_mph=max(fp['wind_gusts_10m'][i] for i in morn), pressure_change_hpa=pm(morn) - pm(prev),
-                max_temp_f=sfo['temperature_2m_max'][-1], rain_night_in=sum(fp['precipitation'][i] or 0 for i in night),
+                max_temp_f=max(fp['temperature_2m'][i] for i in rows(d0 + timedelta(hours=6), d0 + timedelta(hours=18))), rain_night_in=sum(fp['precipitation'][i] or 0 for i in night),
                 morning_vis_mi=None, source='Open-Meteo archive (modeled)')
+
+
+def station_2026():
+    """Fort Point (FTPC1) measurements for 2026 from NDBC monthly + realtime files: {local hour: {field: [values]}}."""
+    from zoneinfo import ZoneInfo
+    from collections import defaultdict
+    PT, UTC = ZoneInfo('America/Los_Angeles'), ZoneInfo('UTC')
+    out = defaultdict(lambda: defaultdict(list))
+    for f in sorted((ROOT / 'data' / 'weather').glob('ftpc1_*2026*.txt')):
+        for line in f.read_text().splitlines():
+            if line.startswith('#') or not line.strip():
+                continue
+            v = line.split()
+            t = datetime(int(v[0]), int(v[1]), int(v[2]), int(v[3]), tzinfo=UTC).astimezone(PT).replace(tzinfo=None)
+            for name, idx, bad in (('wdir', 5, 999), ('wspd', 6, 99), ('gst', 7, 99), ('pres', 12, 9999), ('atmp', 13, 999)):
+                x = v[idx]
+                if x != 'MM' and float(x) < bad:
+                    out[t][name].append(float(x))
+    return out
+
+
+def station_weather(ds, st):
+    """Same fields as the history CSV, from measured Fort Point data (rain still modeled: Fort Point has no gauge)."""
+    d = date.fromisoformat(ds); d0 = datetime(d.year, d.month, d.day)
+    hrs = lambda a, b: [a + timedelta(hours=h) for h in range(int((b - a).total_seconds() // 3600))]
+    def wind(a, b):
+        u = v = 0.0; spd = []
+        for t in hrs(a, b):
+            for s_, dg in zip(st[t]['wspd'], st[t]['wdir']):
+                u += s_ * math.sin(math.radians(dg)); v += s_ * math.cos(math.radians(dg)); spd.append(s_)
+        if not spd: return None, None
+        return math.degrees(math.atan2(u, v)) % 360, sum(spd) / len(spd) * 2.23694
+    def mean(key, a, b):
+        x = [y for t in hrs(a, b) for y in st[t][key]]
+        return sum(x) / len(x) if x else None
+    nd, ns = wind(d0 - timedelta(hours=4), d0 + timedelta(hours=6))
+    md, ms = wind(d0 + timedelta(hours=6), d0 + timedelta(hours=11))
+    if ns is None or ms is None:
+        return None
+    gusts = [y for t in hrs(d0 + timedelta(hours=6), d0 + timedelta(hours=11)) for y in st[t]['gst']]
+    temps = [y for t in hrs(d0 + timedelta(hours=6), d0 + timedelta(hours=18)) for y in st[t]['atmp']]
+    p_now = mean('pres', d0 + timedelta(hours=6), d0 + timedelta(hours=11))
+    p_prev = mean('pres', d0 - timedelta(hours=18), d0 - timedelta(hours=13))
+    modeled = archive_weather(ds)
+    return dict(night_wind_dir=nd, night_wind_mph=ns, morning_wind_dir=md, morning_wind_mph=ms,
+                morning_gust_mph=max(gusts) * 2.23694 if gusts else modeled['morning_gust_mph'],
+                pressure_change_hpa=(p_now - p_prev) if p_now and p_prev else modeled['pressure_change_hpa'],
+                max_temp_f=max(temps) * 9 / 5 + 32 if temps else modeled['max_temp_f'],
+                rain_night_in=modeled['rain_night_in'], morning_vis_mi=None,
+                source='Fort Point station (rain modeled)')
 
 
 def base_name(n):
@@ -113,6 +161,7 @@ def main():
         for n in {base_name(o['comName']) for o in d['obs']}:
             days_seen[n] = days_seen.get(n, 0) + 1
     wx = {r['date']: r for r in csv.DictReader((ROOT / 'outputs' / 'daily_birds_weather.csv').open())}
+    st = station_2026()
 
     out = []
     for ex in EXAMPLES:
@@ -134,7 +183,7 @@ def main():
         sp = sorted(species.values(), key=lambda s: s['order'])
         top = sorted(sp, key=lambda s: -s['count'])[:3]
         rare = sorted((s for s in sp if days_seen.get(s['name'], 0) <= 0.02 * len(birded)), key=lambda s: days_seen.get(s['name'], 0))
-        w = wx.get(date) or archive_weather(date)
+        w = wx.get(date) if wx.get(date, {}).get('night_wind_mph') else (station_weather(date, st) or archive_weather(date))
         lists_that_day = next(len(d['lists']) for d in raw if d['date'] == date)
         out.append(dict(
             kind=ex['kind'], season=ex['season'], group=ex.get('group', 'records'), wx_source=w.get('source', 'Golden Gate stations'), date=date, sub=ex['sub'], url=f"https://ebird.org/checklist/{ex['sub']}",

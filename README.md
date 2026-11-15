@@ -13,11 +13,12 @@ were unicorns 17% of the time versus 5% for a random birded day; its chances are
 but rarely exceed ~30%, because who's out and luck matter a lot.
 
 - `pull_ebird.py` downloads daily checklists and species for eBird hotspot L999240 (needs `EBIRD_API_KEY`).
-- `analyze.py` adds Golden Gate weather (Fort Point, Pier 17, SF Bar buoy, SFO) and compares the best days.
+- `analyze.py` adds Golden Gate weather (Fort Point wind, pressure and temperature; Pier 17 fog; SF Bar buoy waves;
+  rain from Open-Meteo's archive at Battery Godfrey) and compares the best days. No SFO data: it's too far south.
 - `fit_model.py` fits the logistic model and writes `model.json`.
-- `forecast.py` scores the next 7 days (NWS gridpoint over the Presidio, Open-Meteo at Fort Point and SFO),
+- `forecast.py` scores the next 7 days (NWS gridpoint over the Presidio, Open-Meteo at Fort Point),
   writes `site/data.json`, and emails sign-ups once per date when a day within 48 h reaches 25%.
 - `.github/workflows/check.yml` runs it at ~5:40 am and pm Pacific and publishes the page.
   Secrets: `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `ALERT_EMAILS` (comma-separated, sent as BCC).
 
-Data: eBird, Cornell Lab of Ornithology; NOAA National Weather Service, NDBC, CO-OPS and Iowa Environmental Mesonet; Open-Meteo.
+Data: eBird, Cornell Lab of Ornithology; NOAA National Weather Service, NDBC, CO-OPS and Open-Meteo.

@@ -4,7 +4,7 @@
 2. Effort and season adjustment: species ~ log(checklists) + log(observers) + seasonal curve.
    The residual ("birdiness") says how much better than expected a day was.
 3. Weather for each date, Golden Gate stations first: Fort Point (wind, pressure, temperatures),
-   Pier 17 (fog/visibility), SF Bar buoy (waves); SFO airport only for rain and cloud ceiling.
+   Pier 17 (fog/visibility), SF Bar buoy (waves); rain from Open-Meteo's archive at Battery Godfrey. No SFO data.
 4. Compares the best days against all other days in the same season.
 Run: python3 analyze.py
 """
@@ -110,11 +110,9 @@ for p in sorted(WX.glob('pier17_*.csv')):
                 except ValueError:
                     pass
 
-sfo = defaultdict(list)  # local date -> hourly rows
-with open(WX / 'ksfo_2016_2025.csv') as f:
-    for r in csv.DictReader(f):
-        t = datetime.strptime(r['valid'], '%Y-%m-%d %H:%M')  # local time
-        sfo[t.date()].append((t, r))
+# Rain at Battery Godfrey itself (Open-Meteo archive, hourly, local time); SFO is too far south
+_g = json.loads((WX / 'godfrey_precip_2016_2025.json').read_text())['hourly']
+rain_h = {datetime.fromisoformat(t): (x or 0) for t, x in zip(_g['time'], _g['precipitation'])}
 
 def num(x):
     try: return float(x)
@@ -161,21 +159,17 @@ def wx_for(ds):
     air, water = ftp_mean('atmp', *morning), ftp_mean('wtmp', *morning)
     bar_hs = [x for t in hours_between(*morning) if t in bar for x in bar[t]['hs']]
     prev = d - timedelta(days=1)
-    sfo_night = [r for t, r in sfo.get(prev, []) if t.hour >= 20] + [r for t, r in sfo.get(d, []) if t.hour < 6]
-    sfo_morning = [r for t, r in sfo.get(d, []) if 6 <= t.hour < 11]
-    sfo_day = [r for t, r in sfo.get(d, []) if 6 <= t.hour < 18]
-    low_cloud = (sum(1 for r in sfo_morning if r['skyc1'] in ('BKN', 'OVC') and (num(r['skyl1']) or 9999) <= 2000) / len(sfo_morning)) if sfo_morning else None
-    temps = [num(r['tmpf']) for r in sfo_day if num(r['tmpf']) is not None]
+    day_temps_c = [x for t in hours_between(d0 + timedelta(hours=6), d0 + timedelta(hours=18)) if t in ftp for x in ftp[t]['atmp']]
     return dict(
         night_wind_dir=nd, night_wind_mph=ns, morning_wind_dir=md, morning_wind_mph=ms, morning_gust_mph=mg,
         morning_vis_mi=(min(vis) if vis else None),                       # Pier 17, nautical miles
-        low_cloud_frac=low_cloud,                                          # SFO
-        rain_night_in=sum(num(r['p01i']) or 0 for r in sfo_night),         # SFO
-        rain_prevday_in=sum(num(r['p01i']) or 0 for t, r in sfo.get(prev, [])),
+        low_cloud_frac=None,
+        rain_night_in=sum(rain_h.get(t, 0) for t in hours_between(*night)),    # Battery Godfrey (modeled)
+        rain_prevday_in=sum(rain_h.get(t, 0) for t in hours_between(d0 - timedelta(days=1), d0)),
         pressure_change_hpa=(p_now - p_prev if p_now and p_prev else None), # Fort Point, 24 h
         air_minus_water_c=(air - water if air is not None and water is not None else None),
         bar_wave_m=(mean(bar_hs) if bar_hs else None),
-        max_temp_f=(max(temps) if temps else None),
+        max_temp_f=(max(day_temps_c) * 9 / 5 + 32 if day_temps_c else None),  # Fort Point, 6 am-6 pm
     )
 
 for ds in dates:
@@ -219,7 +213,9 @@ for sea in ('fall', 'spring', 'winter'):
     top = [days[ds] for ds in ds_ if days[ds]['birdiness'] >= cut]
     rest = [days[ds] for ds in ds_ if days[ds]['birdiness'] < cut]
     def share(rows, f): return round(sum(1 for r in rows if f(r)) / len(rows), 2)
-    def med(rows, k): return round(median(r[k] for r in rows if r.get(k) is not None), 2)
+    def med(rows, k):
+        v = [r[k] for r in rows if r.get(k) is not None]
+        return round(median(v), 2) if v else None
     s = dict(n_top=len(top), n_rest=len(rest), cut=cut)
     for k in ('night_wind_mph', 'morning_wind_mph', 'morning_gust_mph', 'morning_vis_mi', 'low_cloud_frac', 'pressure_change_hpa', 'air_minus_water_c', 'bar_wave_m', 'max_temp_f'):
         s[k] = (med(top, k), med(rest, k))

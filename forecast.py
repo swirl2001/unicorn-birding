@@ -5,7 +5,7 @@ a top-5% day for species variety at a normal level of birding effort (2016-2025 
 Weather, matched to what the model was trained on:
   - night wind (8 pm-6 am): NWS gridpoint over the Presidio (MTR/83,106), Open-Meteo at Fort Point as backup
   - 24 h pressure change, overnight rain: Open-Meteo at Fort Point
-  - high temperature: Open-Meteo at SFO (the history used SFO's thermometer)
+  - high temperature: Open-Meteo at Fort Point, 6 am-6 pm (the history used the Fort Point station; no SFO data)
 Writes site/data.json and state.json; emails sign-ups once per date when a day within 48 h is a strong bet.
 Standard library only. Run: python3 forecast.py
 """
@@ -23,9 +23,8 @@ MODEL = json.loads((ROOT / 'model.json').read_text())
 ALERT_CHANCE = 0.25   # email when a day within 48 h reaches this (about 5x the everyday odds)
 NWS_GRID = 'https://api.weather.gov/gridpoints/MTR/83,106'
 OM = 'https://api.open-meteo.com/v1/forecast?timezone=America%2FLos_Angeles&past_days=2&forecast_days=8'
-FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability,visibility&daily=sunrise'
-                   '&wind_speed_unit=mph&precipitation_unit=inch')
-SFO = OM + '&latitude=37.6189&longitude=-122.3750&daily=temperature_2m_max&temperature_unit=fahrenheit'
+FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability,visibility&daily=sunrise'
+                   '&wind_speed_unit=mph&precipitation_unit=inch&temperature_unit=fahrenheit')
 SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
 WORDS = dict(N='north', NE='northeast', E='east', SE='southeast', S='south', SW='southwest', W='west', NW='northwest')
 
@@ -76,8 +75,10 @@ def weather():
     om = {k: dict(zip(hours, fp[k])) for k in ('wind_speed_10m', 'wind_direction_10m', 'wind_gusts_10m', 'pressure_msl',
                                                'precipitation', 'precipitation_probability', 'visibility')}
     om['sunrise'] = {date.fromisoformat(t[:10]): datetime.fromisoformat(t) for t in fp_all['daily']['sunrise']}
-    sfo = get(SFO)['daily']
-    tmax = {date.fromisoformat(d): v for d, v in zip(sfo['time'], sfo['temperature_2m_max'])}
+    tmax = {}
+    for t, v in zip(hours, fp['temperature_2m']):
+        if v is not None and 6 <= t.hour < 18:
+            tmax[t.date()] = max(v, tmax.get(t.date(), -999))
     try:
         props = get(NWS_GRID)['properties']
         nws_spd = nws_hourly(props, 'windSpeed', lambda x: x * 0.621371)
@@ -208,7 +209,7 @@ def build(now=None):
                 f"({MODEL['fitted_days']} birded days, 2016–2025), adjusted for how many people were out. Time of year matters most "
                 "(late September and October lead), then warm, dry weather with wind off the land overnight. Even a perfect "
                 "setup is only about a 1-in-4 shot, because who shows up and luck matter too. Weather is from the National "
-                "Weather Service over the Presidio and Open-Meteo at Fort Point."),
+                "Weather Service over the Presidio and Open-Meteo at Fort Point; no SFO data."),
         days=days)
 
 
