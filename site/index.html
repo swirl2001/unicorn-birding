@@ -106,6 +106,7 @@
   .facts svg, .legend svg { width: 14px; height: 14px; flex: none; color: var(--moss); }
   .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; margin: 10px 0 0; font-size: 12px; color: var(--pencil); }
   .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend .more { flex-basis: 100%; justify-content: center; font-style: italic; }
   .legend .compass { width: 14px; height: 14px; }
 
   /* Record days */
@@ -317,16 +318,49 @@
     fog: svg('<path d="M4.6 9h6.9a2.4 2.4 0 0 0 .2-4.8A3.4 3.4 0 0 0 5.2 4.6 2.2 2.2 0 0 0 4.6 9z"/><path d="M2.5 11.5h8"/><path d="M5.5 14h8"/>'),
     sunrise: svg('<path d="M4.5 10.5a3.5 3.5 0 0 1 7 0"/><path d="M1.5 10.5h13"/><path d="M8 3.9v1.7"/><path d="M3.5 6l1.1 1.1"/><path d="M12.5 6l-1.1 1.1"/><path d="M4.5 13h7"/>'),
   };
+  // Graded icons: 1, 2 or 3 marks for a little, more, or a lot (see legend)
+  const DROP = 'M8 2s4 4.6 4 7.6A4 4 0 0 1 4 9.6C4 6.6 8 2 8 2z';
+  const drop = (x, y, k) => `<path stroke-width="${(1.5 / k).toFixed(2)}" transform="translate(${x} ${y}) scale(${k})" d="${DROP}"/>`;
+  const lvl = (x, a, b) => (x == null ? 1 : x < a ? 1 : x < b ? 2 : 3);
+  const GRADED = {
+    rain: [
+      svg(drop(0, 0, 1)),
+      svg(drop(-1.6, 2.6, 0.66) + drop(5.4, -0.6, 0.66)),
+      svg(drop(-2.4, 4, 0.56) + drop(2.4, -0.6, 0.56) + drop(7.2, 4, 0.56)),
+    ],
+    wind: [
+      svg('<path d="M2 8h8.5a2 2 0 1 0-2-2"/>'),
+      svg('<path d="M2 6h8.5a2 2 0 1 0-2-2"/><path d="M2 10h10.5a2 2 0 1 1-2 2"/>'),
+      svg('<path d="M2 4.5h8.5a2 2 0 1 0-2-2"/><path d="M2 8h11.5"/><path d="M2 11.5h8.5a2 2 0 1 1-2 2"/>'),
+    ],
+    gust: [
+      svg('<path d="M2 8h12"/><path d="M11.5 6l2.5 2-2.5 2"/>'),
+      svg('<path d="M2 6h8"/><path d="M2 9.5h12"/><path d="M11.5 7.5l2.5 2-2.5 2"/>'),
+      svg('<path d="M2 4.5h7"/><path d="M2 8h12"/><path d="M2 11.5h8"/><path d="M11.5 6l2.5 2-2.5 2"/>'),
+    ],
+    wave: [
+      svg('<path d="M1.5 8.5c1.6 0 1.6-1.5 3.25-1.5S6.4 8.5 8 8.5s1.6-1.5 3.25-1.5S12.9 8.5 14.5 8.5"/>'),
+      svg('<path d="M1.5 6c1.6 0 1.6-1.5 3.25-1.5S6.4 6 8 6s1.6-1.5 3.25-1.5S12.9 6 14.5 6"/><path d="M1.5 11c1.6 0 1.6-1.5 3.25-1.5S6.4 11 8 11s1.6-1.5 3.25-1.5S12.9 11 14.5 11"/>'),
+      svg('<path d="M1.5 4c1.6 0 1.6-1.5 3.25-1.5S6.4 4 8 4s1.6-1.5 3.25-1.5S12.9 4 14.5 4"/><path d="M1.5 8.5c1.6 0 1.6-1.5 3.25-1.5S6.4 8.5 8 8.5s1.6-1.5 3.25-1.5S12.9 8.5 14.5 8.5"/><path d="M1.5 13c1.6 0 1.6-1.5 3.25-1.5S6.4 13 8 13s1.6-1.5 3.25-1.5S12.9 13 14.5 13"/>'),
+    ],
+    temp: [10.6, 7.6, 4.4].map((top) => svg(`<path d="M6.5 9.3V3.5a1.5 1.5 0 0 1 3 0v5.8a3 3 0 1 1-3 0z"/><path d="M8 11.5V${top}"/>`)),
+    fog: [
+      svg('<path d="M4.6 10.5h6.9a2.4 2.4 0 0 0 .2-4.8A3.4 3.4 0 0 0 5.2 6.1 2.2 2.2 0 0 0 4.6 10.5z"/>'),
+      svg('<path d="M4.6 9h6.9a2.4 2.4 0 0 0 .2-4.8A3.4 3.4 0 0 0 5.2 4.6 2.2 2.2 0 0 0 4.6 9z"/><path d="M3.5 12.5h9"/>'),
+      svg('<path d="M4.6 9h6.9a2.4 2.4 0 0 0 .2-4.8A3.4 3.4 0 0 0 5.2 4.6 2.2 2.2 0 0 0 4.6 9z"/><path d="M2.5 11.5h8"/><path d="M5.5 14h8"/>'),
+    ],
+  };
+  const gi = (kind, x, a, b) => GRADED[kind][lvl(x, a, b) - 1];
   const sky = (v) => (v == null ? null : v < 0.6 ? 'Foggy' : v < 3 ? 'Hazy' : 'No fog');
   const trend = (dp) => (dp == null ? '–' : dp >= 1 ? 'Rising' : dp <= -1 ? 'Falling' : 'Steady');
   function facts(d) {
     const v = (x, f) => (x == null ? '–' : f(x));
     return `<div class="facts">
-      <span title="Morning wind (6–11 am)">${ICON.wind}${v(d.morning_wind_mph, (x) => `<b>${x}</b> mph`)}</span>
-      <span title="Morning gusts">${ICON.gust}${v(d.morning_gust_mph, (x) => `${x} mph`)}</span>
-      <span title="Chance of rain, overnight to 11 am">${ICON.rain}${v(d.rain_pct, (x) => `${x}%`)}</span>
-      <span title="High temperature">${ICON.temp}${v(d.max_temp_f, (x) => `${x}°`)}</span>
-      <span title="Fog at the Gate, 6–11 am${d.morning_vis_mi != null ? ` (visibility ${d.morning_vis_mi} mi)` : ''}">${ICON.fog}${v(d.morning_vis_mi, sky)}</span>
+      <span title="Morning wind (6–11 am)">${gi('wind', d.morning_wind_mph, 8, 15)}${v(d.morning_wind_mph, (x) => `<b>${x}</b> mph`)}</span>
+      <span title="Morning gusts">${gi('gust', d.morning_gust_mph, 12, 20)}${v(d.morning_gust_mph, (x) => `${x} mph`)}</span>
+      <span title="Chance of rain, overnight to 11 am">${gi('rain', d.rain_pct, 30, 60)}${v(d.rain_pct, (x) => `${x}%`)}</span>
+      <span title="High temperature">${gi('temp', d.max_temp_f, 60, 70)}${v(d.max_temp_f, (x) => `${x}°`)}</span>
+      <span title="Fog at the Gate, 6–11 am${d.morning_vis_mi != null ? ` (visibility ${d.morning_vis_mi} mi)` : ''}">${GRADED.fog[d.morning_vis_mi == null || d.morning_vis_mi >= 3 ? 0 : d.morning_vis_mi >= 0.6 ? 1 : 2]}${v(d.morning_vis_mi, sky)}</span>
       <span title="Sunrise">${ICON.sunrise}${v(d.sunrise, (x) => `${x} am`)}</span>
     </div>`;
   }
@@ -346,7 +380,8 @@
     if (!blank) {
       legend.innerHTML = `<span>${compass(180)}Overnight wind</span><span>${ICON.wind}Morning wind</span><span>${ICON.gust}Gusts</span>`
         + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span>`
-        + `<span>${ICON.fog}Morning fog</span><span>${ICON.sunrise}Sunrise</span>`;
+        + `<span>${ICON.fog}Morning fog</span><span>${ICON.sunrise}Sunrise</span>`
+        + `<span class="more">More drops, lines or fill = more</span>`;
       legend.hidden = false;
     }
   }
