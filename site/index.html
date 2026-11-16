@@ -124,8 +124,9 @@
   .tile strong { font-family: var(--serif); font-size: 22px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
   .tile span { font-size: 14px; color: var(--pencil); line-height: 1.3; }
   .share { grid-column: 1 / -1; margin-top: 10px; }
-  .share .track { height: 6px; border-radius: 99px; background: var(--rule); overflow: hidden; }
-  .share .track i { display: block; height: 100%; width: var(--s); background: var(--gold); border-radius: 99px; }
+  .dots { display: flex; flex-wrap: wrap; gap: 3px; }
+  .dots i, .dot-key i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .dot-key { margin: 0 0 24px; font-size: 12px; color: var(--pencil); display: flex; align-items: center; gap: 5px; }
   .share small { display: block; margin-top: 4px; font-size: 12px; color: var(--pencil); }
   .insights { margin: 0 0 16px; padding-left: 18px; }
   .insights li { margin-bottom: 6px; }
@@ -409,6 +410,8 @@
   });
 
   // Record days from site/examples.json (built by examples.py)
+  // One dot per 10 birds (25 on very big days so the rows stay short)
+  const dotUnit = (e) => (Math.max(...e.top.map((t) => t.count)) > 1500 ? 25 : 10);
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const fmtTime = (t) => { const [h, m] = t.split(':').map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`; };
@@ -430,8 +433,9 @@
         <h4>Most birds · ${e.total_birds.toLocaleString()} counted</h4>
         <div class="top3">${e.top.map((t) => `<div class="tile">
           <strong>${t.count.toLocaleString()}</strong><span>${esc(t.name)}</span>
-          <div class="share"><div class="track"><i style="--s:${Math.max(2, t.share * 100)}%"></i></div><small>${Math.round(t.share * 100)}% of all birds counted</small></div>
+          <div class="share"><div class="dots" aria-hidden="true">${'<i></i>'.repeat(Math.max(1, Math.round(t.count / dotUnit(e))))}</div><small>${Math.round(t.share * 100)}% of all birds counted</small></div>
         </div>`).join('')}</div>
+        <p class="dot-key"><i></i>= ${dotUnit(e)} birds</p>
         <h4>Notable</h4>
         <ul class="insights">${e.insights.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
         <p class="rare">Rarest here: ${e.rare.map((r) => `${esc(r.name)} (${r.days} of ${e.birded_days} days)`).join(', ')}.</p>
