@@ -139,6 +139,23 @@ def station_weather(ds, st):
                 source='Fort Point station (rain modeled)')
 
 
+FAMILY_TYPE = {
+    'Hirundinidae': 'swallow', 'Apodidae': 'swallow', 'Trochilidae': 'swallow',
+    'Columbidae': 'pigeon', 'Anatidae': 'duck', 'Gaviidae': 'duck', 'Podicipedidae': 'duck', 'Alcidae': 'duck',
+    'Scolopacidae': 'shorebird', 'Charadriidae': 'shorebird', 'Haematopodidae': 'shorebird', 'Ardeidae': 'shorebird', 'Gruidae': 'shorebird',
+    'Phalacrocoracidae': 'cormorant', 'Sulidae': 'cormorant', 'Pelecanidae': 'pelican',
+    'Accipitridae': 'raptor', 'Falconidae': 'raptor', 'Cathartidae': 'raptor', 'Pandionidae': 'raptor', 'Strigidae': 'raptor',
+    'Laridae': 'gull', 'Stercorariidae': 'gull',
+}
+
+
+def bird_type(t):
+    """Silhouette for the page: by family, with terns split from gulls; everything else is a songbird."""
+    if t.get('familySciName') == 'Laridae' and 'Tern' in t.get('comName', ''):
+        return 'tern'
+    return FAMILY_TYPE.get(t.get('familySciName'), 'songbird')
+
+
 def base_name(n):
     return re.sub(r'\s*\(.*\)$', '', n)
 
@@ -173,7 +190,7 @@ def main():
             if t['category'] not in ('species', 'issf', 'form') and not t['comName'].startswith('Rock Pigeon'):
                 continue  # skip "gull sp.", hybrids and the like; eBird does count feral Rock Pigeons
             name = base_name(t['comName'])
-            s = species.setdefault(name, dict(name=name, count=0, x=False, order=t['taxonOrder']))
+            s = species.setdefault(name, dict(name=name, count=0, x=False, order=t['taxonOrder'], type=bird_type(t)))
             n = o.get('howManyStr')
             if n and n.isdigit():
                 s['count'] += int(n)
@@ -199,7 +216,8 @@ def main():
                 high_f=round(num(w['max_temp_f'])), pressure_change_hpa=round(num(w['pressure_change_hpa']), 1),
                 rain=(num(w['rain_night_in']) or 0) > 0.01,
                 fog=(None if num(w['morning_vis_mi']) is None else num(w['morning_vis_mi']) < 1)),
-            top=[dict(name=s['name'], count=s['count']) for s in top],
+            total_birds=sum(x['count'] for x in sp),
+            top=[dict(name=s['name'], count=s['count'], type=s['type'], share=round(s['count'] / max(1, sum(x['count'] for x in sp)), 3)) for s in top],
             rare=[dict(name=s['name'], days=days_seen.get(s['name'], 0)) for s in rare][:6],
             insights=INSIGHTS[ex['sub']], birded_days=len(birded),
             species=[dict(name=s['name'], count=(s['count'] if not s['x'] or s['count'] else None)) for s in sp]))

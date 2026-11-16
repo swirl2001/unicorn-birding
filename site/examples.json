@@ -26,18 +26,25 @@
    "rain": false,
    "fog": null
   },
+  "total_birds": 6628,
   "top": [
    {
     "name": "Lazuli Bunting",
-    "count": 957
+    "count": 957,
+    "type": "songbird",
+    "share": 0.144
    },
    {
     "name": "Cedar Waxwing",
-    "count": 805
+    "count": 805,
+    "type": "songbird",
+    "share": 0.121
    },
    {
     "name": "Brandt's Cormorant",
-    "count": 750
+    "count": 750,
+    "type": "cormorant",
+    "share": 0.113
    }
   ],
   "rare": [
@@ -523,18 +530,25 @@
    "rain": false,
    "fog": false
   },
+  "total_birds": 2775,
   "top": [
    {
     "name": "Elegant Tern",
-    "count": 400
+    "count": 400,
+    "type": "tern",
+    "share": 0.144
    },
    {
     "name": "Surf Scoter",
-    "count": 314
+    "count": 314,
+    "type": "duck",
+    "share": 0.113
    },
    {
     "name": "Sanderling",
-    "count": 300
+    "count": 300,
+    "type": "shorebird",
+    "share": 0.108
    }
   ],
   "rare": [
@@ -1012,18 +1026,25 @@
    "rain": false,
    "fog": false
   },
+  "total_birds": 3618,
   "top": [
    {
     "name": "Band-tailed Pigeon",
-    "count": 855
+    "count": 855,
+    "type": "pigeon",
+    "share": 0.236
    },
    {
     "name": "California Gull",
-    "count": 800
+    "count": 800,
+    "type": "gull",
+    "share": 0.221
    },
    {
     "name": "Western Gull",
-    "count": 450
+    "count": 450,
+    "type": "gull",
+    "share": 0.124
    }
   ],
   "rare": [
@@ -1477,18 +1498,25 @@
    "rain": false,
    "fog": null
   },
+  "total_birds": 2306,
   "top": [
    {
     "name": "Violet-green Swallow",
-    "count": 584
+    "count": 584,
+    "type": "swallow",
+    "share": 0.253
    },
    {
     "name": "Brown Pelican",
-    "count": 454
+    "count": 454,
+    "type": "pelican",
+    "share": 0.197
    },
    {
     "name": "Brandt's Cormorant",
-    "count": 135
+    "count": 135,
+    "type": "cormorant",
+    "share": 0.059
    }
   ],
   "rare": [
@@ -1934,18 +1962,25 @@
    "rain": false,
    "fog": null
   },
+  "total_birds": 7256,
   "top": [
    {
     "name": "Band-tailed Pigeon",
-    "count": 2565
+    "count": 2565,
+    "type": "pigeon",
+    "share": 0.354
    },
    {
     "name": "Brown Pelican",
-    "count": 1645
+    "count": 1645,
+    "type": "pelican",
+    "share": 0.227
    },
    {
     "name": "Varied Thrush",
-    "count": 988
+    "count": 988,
+    "type": "songbird",
+    "share": 0.136
    }
   ],
   "rare": [
@@ -2367,18 +2402,25 @@
    "rain": false,
    "fog": null
   },
+  "total_birds": 3209,
   "top": [
    {
     "name": "Brandt's Cormorant",
-    "count": 1600
+    "count": 1600,
+    "type": "cormorant",
+    "share": 0.499
    },
    {
     "name": "Elegant Tern",
-    "count": 400
+    "count": 400,
+    "type": "tern",
+    "share": 0.125
    },
    {
     "name": "Band-tailed Pigeon",
-    "count": 298
+    "count": 298,
+    "type": "pigeon",
+    "share": 0.093
    }
   ],
   "rare": [
