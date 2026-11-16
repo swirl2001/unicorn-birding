@@ -128,10 +128,6 @@
   .share .track { height: 6px; border-radius: 99px; background: var(--rule); overflow: hidden; }
   .share .track i { display: block; height: 100%; width: var(--s); background: var(--gold); border-radius: 99px; }
   .share small { display: block; margin-top: 4px; font-size: 12px; color: var(--pencil); }
-  .flock { grid-column: 1 / -1; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 5px; }
-  .flock i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
-  .flock-key { margin: 4px 0 24px; font-size: 12px; color: var(--pencil); }
-  .flock-key i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-right: 4px; vertical-align: 1px; }
   .insights { margin: 0 0 16px; padding-left: 18px; }
   .insights li { margin-bottom: 6px; }
   .rare { font-size: 14px; color: var(--pencil); margin: -6px 0 16px !important; }
@@ -427,19 +423,6 @@
     pelican: '<ellipse cx="19.5" cy="20.5" rx="9" ry="6"/><path d="M14.5 17C12 14 11.2 12 12 9.2L14.6 9.8C14.2 12 15 13.8 17.4 16Z"/><circle cx="13.2" cy="8.8" r="2.8"/><path d="M11 7.6L1 12.2 1.6 13.2 3.4 13.8C6.8 13.4 9.4 12 11.5 10.6Z"/>',
     raptor: '<g transform="translate(-6.2 -4.6) scale(0.122)"><path d="M114.6 40.1C117.0 40.9 125.2 47.8 127.8 49.0C130.4 50.1 129.9 48.4 130.4 47.1C130.8 45.7 130.1 42.0 130.5 40.8C130.9 39.6 131.5 39.4 132.8 40.0C134.1 40.6 135.0 40.6 138.1 44.6C141.3 48.6 148.8 60.6 151.6 63.9C154.4 67.2 153.9 65.0 154.9 64.3C155.9 63.6 156.7 60.2 157.7 59.6C158.6 59.1 159.1 59.0 160.7 61.0C162.2 63.0 164.8 67.4 166.7 71.5C168.6 75.5 170.7 80.8 172.1 85.3C173.4 89.8 172.4 91.0 174.8 98.3C177.2 105.7 183.8 121.0 186.4 129.3C189.1 137.5 188.9 142.0 190.6 148.0C192.3 154.0 193.6 158.4 196.6 165.1C199.5 171.7 205.7 183.2 208.3 187.9C211.0 192.6 210.9 191.8 212.6 193.3C214.2 194.8 213.0 195.4 218.2 196.7C223.3 198.1 236.8 199.4 243.4 201.2C250.0 202.9 255.5 205.8 258.0 207.3C260.5 208.8 259.5 209.1 258.5 210.2C257.6 211.3 255.3 211.6 252.4 213.8C249.4 216.1 243.1 221.6 241.0 223.8C238.9 226.0 239.9 225.7 239.9 227.0C239.9 228.2 238.2 228.0 241.0 231.0C243.7 234.1 250.3 240.7 256.4 245.1C262.5 249.5 271.4 253.2 277.6 257.3C283.8 261.4 289.8 266.5 293.9 269.7C297.9 273.0 300.1 274.7 301.9 276.9C303.8 279.1 305.0 280.7 305.1 283.1C305.3 285.5 302.6 288.8 302.8 291.3C303.1 293.7 305.9 296.2 306.5 297.8C307.1 299.3 308.1 299.7 306.5 300.7C304.8 301.7 298.1 301.6 296.4 303.7C294.8 305.8 296.9 311.1 296.6 313.2C296.3 315.3 295.5 315.7 294.6 316.3C293.8 316.9 293.1 317.1 291.4 316.7C289.8 316.2 286.5 314.1 284.9 313.6C283.4 313.1 283.1 312.3 282.2 313.9C281.4 315.4 280.7 321.1 279.9 322.9C279.1 324.8 279.8 325.6 277.5 325.0C275.2 324.4 269.3 320.1 266.2 319.5C263.1 318.8 261.3 321.2 258.9 321.1C256.4 321.0 254.0 319.1 251.6 318.8C249.1 318.6 248.7 319.8 244.2 319.6C239.8 319.4 233.1 319.2 224.7 317.7C216.3 316.1 201.1 312.4 193.8 310.3C186.4 308.3 184.3 307.3 180.7 305.5C177.2 303.6 174.3 301.1 172.3 299.1C170.3 297.2 171.3 296.6 168.9 293.8C166.5 291.0 160.2 284.6 157.8 282.4C155.3 280.2 155.6 280.1 154.0 280.8C152.4 281.4 150.2 282.5 148.2 286.4C146.2 290.3 144.2 299.5 141.8 304.3C139.5 309.1 138.6 312.5 134.2 315.3C129.9 318.1 120.8 320.3 115.6 321.2C110.5 322.1 107.4 321.4 103.4 320.5C99.4 319.6 94.3 317.8 91.5 315.7C88.6 313.5 88.7 309.2 86.2 307.5C83.8 305.9 80.2 308.7 76.7 305.6C73.3 302.4 68.1 295.3 65.5 288.8C62.9 282.4 62.5 271.7 61.3 266.8C60.2 262.0 58.4 262.1 58.5 259.5C58.7 256.9 62.4 254.1 62.4 251.4C62.5 248.7 58.2 246.2 58.9 243.3C59.6 240.5 66.0 237.0 66.8 234.3C67.6 231.5 63.8 228.2 63.7 226.8C63.6 225.4 62.6 225.8 66.0 225.9C69.3 225.9 78.6 226.6 83.9 227.1C89.2 227.7 92.1 229.0 97.7 229.2C103.3 229.5 113.0 228.9 117.2 228.6C121.4 228.2 121.4 228.1 122.9 227.0C124.5 226.0 126.2 223.7 126.6 222.1C126.9 220.5 126.8 219.0 125.0 217.5C123.2 216.1 118.2 214.8 115.6 213.1C113.1 211.4 112.3 210.9 109.7 207.4C107.1 203.9 103.3 198.3 100.0 192.0C96.7 185.6 91.4 174.6 90.0 169.2C88.7 163.7 91.8 163.9 91.8 159.4C91.9 154.9 90.4 147.9 90.5 142.3C90.5 136.7 92.1 131.4 92.2 126.0C92.2 120.6 90.8 113.7 90.8 109.7C90.9 105.8 92.2 104.7 92.4 102.4C92.5 100.1 91.6 98.1 91.9 95.9C92.2 93.7 93.9 91.6 94.0 89.4C94.1 87.2 92.2 85.2 92.3 82.9C92.3 80.6 94.2 78.1 94.3 75.5C94.3 73.0 92.4 69.1 92.5 67.5C92.7 65.9 93.5 65.4 95.3 65.7C97.1 65.9 101.7 68.5 103.4 68.9C105.1 69.4 105.3 68.9 105.7 68.4C106.1 67.9 106.5 68.0 105.8 65.8C105.0 63.6 101.7 57.4 101.1 55.2C100.6 53.0 101.5 52.8 102.3 52.4C103.1 52.0 103.9 51.8 105.8 52.8C107.8 53.9 112.1 57.8 114.0 58.8C115.9 59.9 116.7 59.6 117.3 59.1C117.9 58.6 118.3 58.6 117.6 56.0C117.0 53.5 113.9 46.5 113.4 43.8C112.9 41.1 112.2 39.2 114.6 40.1Z"/></g>',
   };
-  const unit = (e) => (Math.max(...e.top.map((t) => t.count)) > 1500 ? 25 : 10);
-  // Loose, flock-like dots: small seeded jitter in position, size and opacity (same every load)
-  function flockDots(n, seed) {
-    let h = 0; for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-    const rnd = () => ((h = (h * 1664525 + 1013904223) >>> 0) / 4294967296);
-    let out = '';
-    for (let i = 0; i < n; i++) {
-      const s = 4 + rnd() * 3, dx = (rnd() - 0.5) * 3, dy = (rnd() - 0.5) * 4;
-      out += `<i style="width:${s.toFixed(1)}px;height:${s.toFixed(1)}px;transform:translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px);opacity:${(0.65 + rnd() * 0.35).toFixed(2)}"></i>`;
-    }
-    return out;
-  }
-  const FLOCK = new URLSearchParams(location.search).has('flock');  // try the flock-dot version with ?flock
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const fmtTime = (t) => { const [h, m] = t.split(':').map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`; };
@@ -462,11 +445,8 @@
         <div class="top3">${e.top.map((t) => `<div class="tile">
           <svg class="bird" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">${BIRD[t.type] || BIRD.songbird}</svg>
           <strong>${t.count.toLocaleString()}</strong><span>${esc(t.name)}</span>
-          ${FLOCK
-            ? `<div class="flock" aria-hidden="true">${flockDots(Math.max(1, Math.round(t.count / unit(e))), t.name)}</div>`
-            : `<div class="share"><div class="track"><i style="--s:${Math.max(2, t.share * 100)}%"></i></div><small>${Math.round(t.share * 100)}% of all birds counted</small></div>`}
+          <div class="share"><div class="track"><i style="--s:${Math.max(2, t.share * 100)}%"></i></div><small>${Math.round(t.share * 100)}% of all birds counted</small></div>
         </div>`).join('')}</div>
-        ${FLOCK ? `<p class="flock-key"><i></i>= ${unit(e)} birds</p>` : ''}
         <h4>Notable</h4>
         <ul class="insights">${e.insights.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
         <p class="rare">Rarest here: ${e.rare.map((r) => `${esc(r.name)} (${r.days} of ${e.birded_days} days)`).join(', ')}.</p>
