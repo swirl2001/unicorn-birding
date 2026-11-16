@@ -33,19 +33,22 @@ OFFSHORE = ('N', 'NE', 'E')
 def sector(deg):
     if deg is None: return None
     return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][int(((deg + 22.5) % 360) // 45)]
-WEATHER = ['offshore_night_fall', 'south_night_spring', 'night_wind_mph', 'pressure_change_hpa', 'max_temp_f', 'rain_night']
-def weather_terms(ds, night_dir, night_mph, dp, tmax, rain):
+WEATHER = ['offshore_night_fall', 'south_night_spring', 'night_wind_mph', 'pressure_change_hpa', 'max_temp_f', 'rain_night',
+           'rain_prev3_in', 'warmup_f']  # last two: lead-up (see leadup.py)
+def weather_terms(ds, night_dir, night_mph, dp, tmax, rain, rain_prev3, warmup):
     m = int(ds[5:7]); fall, spring = m in (8, 9, 10, 11), m in (3, 4, 5)
     return [1.0 if fall and night_dir in OFFSHORE else 0.0,
             1.0 if spring and night_dir in ('S', 'SE', 'SW') else 0.0,
-            night_mph, dp, tmax, 1.0 if rain else 0.0]
+            night_mph, dp, tmax, 1.0 if rain else 0.0, rain_prev3, warmup]
 
+lead = {r['date']: r for r in csv.DictReader((ROOT / 'outputs' / 'leadup_days.csv').open())}
 X, y, keep = [], [], []
 for r, yy in zip(rows, y_all):
     w = weather_terms(r['date'], sector(f(r['night_wind_dir'])), f(r['night_wind_mph']), f(r['pressure_change_hpa']),
-                      f(r['max_temp_f']), (f(r['rain_night_in']) or 0) > 0.01)
+                      f(r['max_temp_f']), (f(r['rain_night_in']) or 0) > 0.01,
+                      f(lead.get(r['date'], {}).get('rain_prev3_in')), f(lead.get(r['date'], {}).get('warmup_f')))
     if None in w: continue
-    X.append(season_terms(r['date']) + w); y.append(yy)
+    X.append(season_terms(r['date']) + w); y.append(yy); keep.append(r['date'])
 X, y = np.array(X), np.array(y)
 mu, sd = X.mean(0), X.std(0)
 Z = np.c_[np.ones(len(X)), (X - mu) / sd]

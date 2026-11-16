@@ -133,6 +133,14 @@
   .byline { margin-top: 14px !important; font-size: 14px; color: var(--pencil); }
   .byline a { color: var(--moss); }
 
+  /* Notes on the data */
+  .notes h3 { margin: 18px 0 6px; font-size: 15px; font-weight: 700; }
+  .notes h3:first-child { margin-top: 0; }
+  .notes p, .notes li { font-size: 14px; color: var(--pencil); }
+  .notes ul { margin: 0; padding-left: 18px; }
+  .notes li + li { margin-top: 4px; }
+  .notes b { color: var(--ink); font-weight: 600; }
+
   footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--pencil); }
   footer p { margin: 0 0 8px; }
 
@@ -208,6 +216,51 @@
     <h2>Other recent high days</h2>
     <p class="muted" style="margin:0 0 14px">Big checklists from 2026, the first year since the forecast's 10-year history.</p>
     <div class="records" id="recent"></div>
+  </section>
+
+  <section class="notes" id="notes">
+    <h2>Notes on the data</h2>
+    <div class="sheet">
+      <h3>Bird history</h3>
+      <ul>
+        <li><b>Source:</b> every eBird checklist at Presidio–Battery Godfrey (hotspot L999240), 2016–2025: 944 days with at least one checklist.</li>
+        <li><b>Counting species:</b> subspecies and forms count toward their species; "sp.", slash and hybrid entries don't. Feral Rock Pigeon counts, as on eBird.</li>
+        <li><b>Fair comparison:</b> more birders find more species, so each day's total is adjusted for the number of checklists and observers, and for the time of year.</li>
+        <li><b>Unicorn day:</b> the top 5% of days for variety at a normal effort (3 checklists by 3 birders): about 77+ species. About 5% of birded days qualify.</li>
+      </ul>
+      <h3>Weather history (all local, no SFO)</h3>
+      <ul>
+        <li><b>Fort Point station</b> (NOAA NDBC FTPC1, about 1 mile away): wind, gusts, direction, pressure and air temperature.</li>
+        <li><b>Pier 17</b> (NOAA): morning visibility, for fog. <b>SF Bar buoy</b> (NDBC 46237): ocean waves.</li>
+        <li><b>Rain</b> at Battery Godfrey from Open-Meteo's historical archive (modeled), since Fort Point has no rain gauge.</li>
+        <li><b>Time windows:</b> "overnight" is 8 pm to 6 am, when migrants fly; "morning" is 6 to 11 am; the high is the warmest reading from 6 am to 6 pm.</li>
+      </ul>
+      <h3>What predicts a big day</h3>
+      <ul>
+        <li><b>Time of year matters most:</b> late September and October lead, then April and May.</li>
+        <li><b>That day:</b> warm, dry, a rising barometer, and wind off the land overnight (north to east in fall, south in spring).</li>
+        <li><b>The lead-up:</b> big days often come right after a warm-up of a few degrees and after rain in the previous three days that has cleared out, which can release migrants held back by the storm. Rain the night before hurts.</li>
+        <li><b>No help:</b> a flip from onshore to offshore wind, south winds on the nights before, and the three-day pressure trend added nothing once the rest was known.</li>
+      </ul>
+      <h3>The model and how good it is</h3>
+      <ul>
+        <li>A logistic regression (a standard statistical model, not AI) learns how much each factor above raises or lowers the odds of a unicorn day.</li>
+        <li>Tested on days it hadn't seen (5-fold cross-validation): its top 5% picks were unicorns 23% of the time, versus 5% for a random birded day.</li>
+        <li>Its highest chances run a little high: days it scored around 30% turned out to be unicorns about 22% of the time. Luck and who shows up matter a lot.</li>
+      </ul>
+      <h3>The live forecast</h3>
+      <ul>
+        <li>Runs automatically at about 5:40 am and 5:40 pm Pacific on GitHub Actions.</li>
+        <li><b>Overnight wind:</b> National Weather Service hourly forecast over the Presidio. <b>Temperature, pressure, rain, gusts, visibility and sunrise:</b> Open-Meteo at Fort Point.</li>
+        <li>Inputs are capped at the range seen in the history, so a freak forecast can't push the chance off the charts.</li>
+        <li><b>Email alerts</b> go out once per date when a day within 48 hours reaches 25% (about 5× a normal day).</li>
+      </ul>
+      <h3>Record days</h3>
+      <ul>
+        <li>Checklists, counts and birder names are from eBird. "Notable" bullets are written from the birders' own checklist notes.</li>
+        <li>Weather for 2016–2025 is from the stations above. For 2026 it's measured Fort Point data (NDBC monthly and real-time files), with rain modeled.</li>
+      </ul>
+    </div>
   </section>
 
   <footer>

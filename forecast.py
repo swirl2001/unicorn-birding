@@ -22,7 +22,7 @@ MODEL = json.loads((ROOT / 'model.json').read_text())
 
 ALERT_CHANCE = 0.25   # email when a day within 48 h reaches this (about 5x the everyday odds)
 NWS_GRID = 'https://api.weather.gov/gridpoints/MTR/83,106'
-OM = 'https://api.open-meteo.com/v1/forecast?timezone=America%2FLos_Angeles&past_days=2&forecast_days=8'
+OM = 'https://api.open-meteo.com/v1/forecast?timezone=America%2FLos_Angeles&past_days=4&forecast_days=8'
 FORT_POINT = OM + ('&latitude=37.8106&longitude=-122.4655&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,precipitation,precipitation_probability,visibility&daily=sunrise'
                    '&wind_speed_unit=mph&precipitation_unit=inch&temperature_unit=fahrenheit')
 SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
@@ -116,18 +116,18 @@ def morning_mean(series, d):
     return sum(vals) / len(vals) if vals else None
 
 
-def chance(d, night_dir, night_mph, dp, t, rain):
+def chance(d, night_dir, night_mph, dp, t, rain, rain_prev3, warmup):
     m = d.month; fall, spring = m in (8, 9, 10, 11), m in (3, 4, 5)
     x = season_terms(d) + [1.0 if fall and night_dir in MODEL['offshore'] else 0.0,
                            1.0 if spring and night_dir in ('S', 'SE', 'SW') else 0.0,
-                           night_mph, dp, t, 1.0 if rain else 0.0]
+                           night_mph, dp, t, 1.0 if rain else 0.0, rain_prev3, warmup]
     # cap each input at 2.5 SD of the training data so a freak forecast can't extrapolate the model
     z = MODEL['coef'][0] + sum(c * max(-2.5, min(2.5, (xi - mu) / sd))
                                for c, xi, mu, sd in zip(MODEL['coef'][1:], x, MODEL['mean'], MODEL['sd']))
     return 1 / (1 + math.exp(-z)), x
 
 
-def describe(d, night_dir, night_mph, dp, t, rain):
+def describe(d, night_dir, night_mph, dp, t, rain, rain_prev3=0, warmup=0):
     good, bad = [], []
     m = d.month
     if m in (9, 10):
@@ -144,6 +144,10 @@ def describe(d, night_dir, night_mph, dp, t, rain):
         good.append(f'warm ({round(t)}°F)')
     if dp is not None and dp >= 1.5:
         good.append('pressure rising')
+    if warmup >= 3:
+        good.append(f'warming up ({round(warmup)}° above recent days)')
+    if rain_prev3 > 0.05 and not rain:
+        good.append('clearing after rain')
     if rain:
         bad.append('rain overnight')
     if night_mph is not None and night_mph >= 15:
@@ -181,14 +185,21 @@ def build(now=None):
         start = datetime(d.year, d.month, d.day) - timedelta(hours=4)
         rain_in = sum(om['precipitation'].get(start + timedelta(hours=h)) or 0 for h in range(10))
         t = tmax.get(d)
+        # Lead-up (see leadup.py): rain on the 3 nights before, and today's high vs the 3 days before
+        def night_rain(day):
+            st = datetime(day.year, day.month, day.day) - timedelta(hours=4)
+            return sum(om['precipitation'].get(st + timedelta(hours=h)) or 0 for h in range(10))
+        rain_prev3 = sum(night_rain(d - timedelta(days=k)) for k in (1, 2, 3))
+        prior_t = [tmax.get(d - timedelta(days=k)) for k in (1, 2, 3)]
+        warmup = (t - sum(prior_t) / 3) if t is not None and None not in prior_t else 0.0
         m_wind, m_gust, rain_pct, vis_mi = morning_conditions(d, om, nws_spd)
         sunrise = om['sunrise'].get(d)
         if None in (mph, dp, t):
             p, note = 0.0, 'No forecast yet'
             good, bad = [], []
         else:
-            p, _ = chance(d, nd, mph, dp, t, rain_in > 0.01)
-            good, bad = describe(d, nd, mph, dp, t, rain_in > 0.01)
+            p, _ = chance(d, nd, mph, dp, t, rain_in > 0.01, rain_prev3, warmup)
+            good, bad = describe(d, nd, mph, dp, t, rain_in > 0.01, rain_prev3, warmup)
             note = ', '.join((good + bad if p >= MODEL['base_rate'] else bad + good)[:2]).capitalize()
         label = 'today' if i == 0 else 'tomorrow' if i == 1 else d.strftime('%A')
         summary = (f"{', '.join(good).capitalize() or 'Nothing special lining up'}"
@@ -198,7 +209,7 @@ def build(now=None):
             note=note, summary=summary, within_48h=i <= 1,
             night_wind_mph=None if mph is None else round(mph, 1), night_wind_from=nd, night_wind_deg=None if nd is None else round(deg), wind_source=src,
             pressure_change_hpa=None if dp is None else round(dp, 1), max_temp_f=None if t is None else round(t),
-            rain_overnight_in=round(rain_in, 2), morning_wind_mph=m_wind, morning_gust_mph=m_gust, rain_pct=rain_pct,
+            rain_overnight_in=round(rain_in, 2), rain_prev3_in=round(rain_prev3, 2), warmup_f=round(warmup, 1), morning_wind_mph=m_wind, morning_gust_mph=m_gust, rain_pct=rain_pct,
             morning_vis_mi=vis_mi, sunrise=sunrise.strftime('%-I:%M') if sunrise else None))
     return dict(
         generated=now.astimezone(timezone.utc).isoformat(timespec='minutes'),
@@ -207,7 +218,7 @@ def build(now=None):
         method=(f"A unicorn day is one of the top 5% of days at Battery Godfrey for variety: about {MODEL['cut_species']}+ species "
                 "for a normal group of birders. We learned what those days have in common from 10 years of eBird checklists "
                 f"({MODEL['fitted_days']} birded days, 2016–2025), adjusted for how many people were out. Time of year matters most "
-                "(late September and October lead), then warm, dry weather with wind off the land overnight. Even a perfect "
+                "(late September and October lead), then warm, dry weather with wind off the land overnight, especially a warm-up just after rain clears. Even a perfect "
                 "setup is only about a 1-in-4 shot, because who shows up and luck matter too. Weather is from the National "
                 "Weather Service over the Presidio and Open-Meteo at Fort Point; no SFO data."),
         days=days)
