@@ -326,7 +326,6 @@
       <span title="Morning gusts">${ICON.gust}${v(d.morning_gust_mph, (x) => `${x} mph`)}</span>
       <span title="Chance of rain, overnight to 11 am">${ICON.rain}${v(d.rain_pct, (x) => `${x}%`)}</span>
       <span title="High temperature">${ICON.temp}${v(d.max_temp_f, (x) => `${x}°`)}</span>
-      <span title="Barometer vs. yesterday morning">${ICON.gauge}${trend(d.pressure_change_hpa)}</span>
       <span title="Fog at the Gate, 6–11 am${d.morning_vis_mi != null ? ` (visibility ${d.morning_vis_mi} mi)` : ''}">${ICON.fog}${v(d.morning_vis_mi, sky)}</span>
       <span title="Sunrise">${ICON.sunrise}${v(d.sunrise, (x) => `${x} am`)}</span>
     </div>`;
@@ -346,7 +345,7 @@
     const legend = $('legend');
     if (!blank) {
       legend.innerHTML = `<span>${compass(180)}Overnight wind</span><span>${ICON.wind}Morning wind</span><span>${ICON.gust}Gusts</span>`
-        + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span><span>${ICON.gauge}Barometer</span>`
+        + `<span>${ICON.rain}Rain chance</span><span>${ICON.temp}High</span>`
         + `<span>${ICON.fog}Morning fog</span><span>${ICON.sunrise}Sunrise</span>`;
       legend.hidden = false;
     }
